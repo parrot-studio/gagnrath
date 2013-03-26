@@ -77,4 +77,7 @@ Gagnrath::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # mail config
+  MailSettings.set_mail_config(config)
 end

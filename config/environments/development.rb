@@ -24,4 +24,7 @@ Gagnrath::Application.configure do
 
   # Debug mode disables concatenation and preprocessing of assets.
   config.assets.debug = true
+
+  # mail config
+  MailSettings.set_mail_config(config)
 end

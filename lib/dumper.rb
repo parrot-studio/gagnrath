@@ -75,7 +75,15 @@ class Dumper
     self
   end
 
+  def send_mail
+    m = DumpSender.backup(archive_file_path)
+    m.deliver if m
+    m
+  end
+
   def execute
     dump.archive
+    send_mail if ServerSettings.use_mail?
+    self
   end
 end

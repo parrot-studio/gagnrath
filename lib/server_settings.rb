@@ -95,6 +95,10 @@ class ServerSettings < Settingslogic
       t
     end
 
+    def use_mail?
+      self.env.use_mail ? true : false
+    end
+
   end
 
 end

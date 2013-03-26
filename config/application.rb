@@ -11,6 +11,7 @@ require "sprockets/railtie"
 Bundler.require(*Rails.groups(assets: %w(development test)))
 
 require File.expand_path('../../lib/server_settings', __FILE__)
+require File.expand_path('../../lib/mail_settings', __FILE__)
 
 module Gagnrath
   class Application < Rails::Application
