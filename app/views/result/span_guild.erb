@@ -1,0 +1,30 @@
+<%
+from = @dates.first
+to = @dates.last
+span_label = format_span(from, to)
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'result_header' %>
+      <li>
+        <%= link_to('Span', result_span_path) %> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <%= span_label %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= @gname %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <h3><%= span_label %> (<%= @dates.size %>weeks) Result : <%= @gname %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <hr/>
+  </div>
+</div>
+<%= render 'guild_result', results: @results, total: @total, dates: @dates, target: :span %>

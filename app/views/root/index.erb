@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="span6">
+    <div class="alert alert-success">
+      Last Update : <strong><%= format_time(@situation.update_time) %></strong>
+    </div>
+  </div>
+  <div class="span4">
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        <%= link_to('Reload', (@reload ? root_path(re: @reload) : root_path), class: "btn btn-primary") %>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Auto Reload (now:<%= @reload ? "#{@reload}sec" : 'off' %>) <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><%= link_to('off', root_path) %></li>
+          <% reload_cycle.each do |c| %>
+            <li><%= link_to("#{c}sec", root_path(re: c)) %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="span2">
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        <a class="btn btn-info" href="<%= menu_path %>">Strategy Room</a>
+      </div>
+    </div>
+  </div>
+</div>
+<%= render 'forts_table', situation: @situation, unlink: true %>

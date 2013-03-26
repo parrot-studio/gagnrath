@@ -1,0 +1,20 @@
+<tr>
+  <th colspan="2" class="span3"><br/></th>
+  <% case
+  when gvtype_fe? %>
+    <th class="well span1">Total</th>
+    <% FortUtil.fort_groups_fe.each do |g| %>
+      <th class="span1"><%= g %></th>
+    <% end %>
+    <th class="well span1">FE</th>
+    <% FortUtil.fort_groups_se.each do |g| %>
+      <th class="span1"><%= g %></th>
+    <% end %>
+    <th class="well span1">SE</th>
+  <% when gvtype_te? %>
+    <th class="well span1">Total</th>
+    <% FortUtil.fort_groups_te.each do |g| %>
+      <th class="span1"><%= g %></th>
+    <% end %>
+  <% end %>
+</tr>

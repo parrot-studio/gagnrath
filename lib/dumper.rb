@@ -1,0 +1,81 @@
+# coding: utf-8
+class Dumper
+  include TimeUtil
+
+  class << self
+    def dump_path
+      File.expand_path(File.join(Rails.root, 'dump'))
+    end
+
+    def execute
+      self.new.execute
+    end
+  end
+
+  def dump_path
+    self.class.dump_path
+  end
+
+  def dump_time
+    @dump_time ||= DateTime.now
+    @dump_time
+  end
+
+  def dump_name
+    "dump_#{time_to_revision(dump_time)}.sql"
+  end
+
+  def dump_output_path
+    File.join(dump_path, dump_name)
+  end
+
+  def archive_file_name
+    "dump_#{time_to_revision(dump_time)}.tar.gz"
+  end
+
+  def archive_file_path
+    File.join(dump_path, archive_file_name)
+  end
+
+  def config
+    @config ||= lambda do
+      path = File.expand_path(File.join(Rails.root, 'config', 'database.yml'))
+      conf = YAML.load(File.read(path))
+      conf[Rails.env]
+    end.call
+    @config
+  end
+
+  def dump
+    FileUtils.mkdir_p(dump_path) unless File.exist?(dump_path)
+    FileUtils.rm_r(dump_output_path) if File.exist?(dump_output_path)
+
+    cmd = "mysqldump -u #{config['username']} -p#{config['password']}"
+    cmd << " -h #{config['host']}" if config['host']
+    cmd << " -P #{config['port']}" if config['port']
+    cmd << " #{config['database']} > #{dump_output_path}"
+
+    rsl = ExecuteCommand.execute(cmd)
+    raise "dump error => #{rsl.result}" if rsl.has_error?
+    raise "dump missing" unless File.exist?(dump_output_path)
+
+    self
+  end
+
+  def archive
+    File.unlink(archive_file_path) if File.exist?(archive_file_path)
+    return self unless File.exist?(dump_output_path)
+
+    cmd = "cd #{dump_path}; tar czf #{archive_file_name} #{dump_name}"
+    rsl = ExecuteCommand.execute(cmd)
+    raise "archive error => #{rsl.result}" if rsl.has_error?
+    raise "archive missing" unless File.exist?(archive_file_path)
+    FileUtils.rm_r(dump_output_path) if File.exist?(dump_output_path)
+
+    self
+  end
+
+  def execute
+    dump.archive
+  end
+end

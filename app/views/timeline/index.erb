@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'menu_crumb' %>
+      <% if params[:date] %>
+        <li>
+          <%= link_to('Timeline', timeline_path) %> <span class="divider">&gt;</span>
+        </li>
+        <li class="active"><strong><%= divided_date(params[:date]) %></strong></li>
+      <% else %>
+        <li class="active"><strong>Timeline</strong></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span2">
+    <h3>Timeline</h3>
+  </div>
+  <div class="span7">
+    <p>
+      <small>
+        <%= link_to("Recent #{data_size_recently}weeks", timeline_path) %>
+        <% if data_size_max > data_size_recently %>
+          / <%= link_to("Recent #{data_size_max}weeks", timeline_path(recently: data_size_max)) %>
+        <% end %>
+        / <%= link_to("All dates", timeline_path(all: 1)) %>
+      </small>
+    </p>
+  </div>
+  <div class="span3">
+    <%= link_to("Guild with Span", timeline_span_union_select_path, class: 'btn btn-info') %>
+  </div>
+</div>
+<%
+flist = case
+when gvtype_fe?
+  [fort_groups, 'SE'].flatten
+when gvtype_te?
+  [fort_groups, 'TE'].flatten
+end
+%>
+<div class="row">
+  <div class="span<%= 5 + flist.size %>">
+    <table class="table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Situations</th>
+          <th colspan="<%= flist.size %>">Forts</th>
+          <th>Guild</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @dates.sort.reverse.each do |d| %>
+          <tr>
+            <td class="span2"><%= divided_date(d) %></td>
+            <td class="span1"><%= link_to("Time List", timeline_revs_path(date: d)) %></td>
+            <% flist.each do |t| %>
+              <td class="span1"><%= link_to(t, timeline_for_fort_path(date: d, fort: t)) %></td>
+            <% end %>
+            <td class="span2">
+              <%= link_to('Select Guild', timeline_union_path(date: d)) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

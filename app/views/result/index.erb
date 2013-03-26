@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'menu_crumb' %>
+      <li class="active"><strong>Result</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>History of Rulers</h3>
+    <ul class="nav nav-tabs nav-stacked">
+      <% FortUtil.fort_groups.each do |f| %>
+        <li><%= link_to(f, result_rulers_path(fort: f)) %></li>
+      <% end %>
+    </ul>
+    <h3>Result for Date</h3>
+    <ul class="nav nav-tabs nav-stacked">
+      <li><%= link_to('Dates', result_dates_path) %></li>
+    </ul>
+    <h3>Result for Guilds</h3>
+    <ul class="nav nav-tabs nav-stacked">
+      <li><%= link_to('Total', result_total_path) %></li>
+      <li><%= link_to('Recently', result_recently_path) %></li>
+      <li><%= link_to('Span', result_span_path) %></li>
+    </ul>
+  </div>
+</div>

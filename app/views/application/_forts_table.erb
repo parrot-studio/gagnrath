@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="span12">
+    <table class="table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="span2"><br/></th>
+          <th class="span3">1</th>
+          <th class="span3">2</th>
+          <th class="span3">3</th>
+          <th class="span3">4</th>
+          <th class="span3">5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% forts = situation.forts_map; sup_time = situation.update_time
+        fort_groups.each do |g| %>
+          <tr>
+            <th class="span2"><%= g %></th>
+            <% fort_nums.each do |num| %>
+              <%
+              f = forts["#{g}#{num}"]
+              if f
+                uptime = f.uptime_from(sup_time) / 60
+                upweek = uptime / 10080
+              %>
+                <td class="span3">
+                  <p>
+                    <% if unlink %>
+                      <small class="muted"><%= f.fort_name %></small><br/>
+                    <% else %>
+                      <small class="muted">
+                        <%= link_to(f.fort_name, timeline_for_fort_path(date: situation.gvdate, fort: g)) %>
+                      </small><br/>
+                      <small class="muted"><%= f.formal_name %></small><br/>
+                    <% end %>
+                    <% if f.hot?(sup_time) %>
+                      <strong><span class="attention"><%= f.guild_name %></span></strong>
+                    <% else %>
+                      <strong><%= f.guild_name %></strong>
+                    <% end %>
+                    <% unless unlink %>
+                      <small class="muted">
+                        <%= link_to '★', timeline_for_guild_path(date: situation.gvdate, name: encode_for_url(f.guild_name)) %>
+                      </small>
+                    <% end %>
+                    <br/>
+                    <% if upweek > 0 %>
+                      <small class="muted">uptime:<span class="uptime-attention"><%= upweek %>week!!</span></small>
+                    <% else %>
+                      <small class="muted">uptime:<%= uptime %>min</small>
+                    <% end %>
+                  </p>
+                </td>
+              <% else %>
+                <td class="span3">-</td>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

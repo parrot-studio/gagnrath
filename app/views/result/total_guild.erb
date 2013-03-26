@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'result_header' %>
+      <li>
+        <%= link_to('Total', result_total_path) %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= @gname %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <h3>Total Result : <%= @gname %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <hr/>
+  </div>
+</div>
+<%= render 'guild_result', results: @results, total: @total, dates: [], target: :total %>

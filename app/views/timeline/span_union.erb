@@ -1,0 +1,37 @@
+<%
+from = params[:from]
+to = params[:to]
+span_label = format_span(from, to)
+gname = (@names.size == 1 ? @names.first : 'Union')
+name_table = create_name_table(@names)
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'timeline_header' %>
+      <li>
+        <%= link_to('Guild with Span', timeline_span_union_select_path) %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= "#{span_label} : #{gname}" %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <h3><%= "#{gname} : #{span_label}" %></h3>
+    <% if @names.size > 1 %>
+      <ul class="unstyled">
+        <% name_table.each do |k, v| %>
+          <li class="union">
+            <%= v %> : <%= link_to(k, timeline_span_guild_path(from: from, to: to, name: encode_for_url(k))) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+<% @dates.each do |date|
+  tl =  @timelines[date] 
+  next unless tl %>
+  <%= render 'guild_timeline', timeline: tl, name_table: name_table, date: date %>
+<% end %>

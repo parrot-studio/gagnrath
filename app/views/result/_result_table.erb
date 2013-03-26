@@ -1,0 +1,57 @@
+<tr>
+  <td rowspan="2" class="span2 ">
+    <% case header_type %>
+    <% when :total %>
+      <br/>
+    <% when :guild %>
+      <%= link_to(divided_date(result.gvdate), result_forts_path(date: result.gvdate)) %>
+    <% when :union %>
+      <% case target %>
+      <% when :total %>
+        <%= link_to(result.guild_name, result_total_guild_path(name: encode_for_url(result.guild_name))) %>
+      <% when :recently %>
+        <%= link_to(result.guild_name,
+          result_recently_guild_path(num: dates.size, name: encode_for_url(result.guild_name))) %>
+      <% when :span %>
+        <%= link_to(result.guild_name,
+          result_span_guild_path(from: dates.first, to: dates.last, name: encode_for_url(result.guild_name))) %>
+      <% end %>
+    <% end %>
+  </td>
+  <td class="span1">Called</td>
+  <td class="attention well span1"><%= result.called_count %></td>
+  <% case
+  when gvtype_fe? %>
+    <% FortUtil.fort_groups_fe.each do |g| %>
+      <td class="span1"><%= result.called_count_for_group(g) %></td>
+    <% end %>
+    <td class="well span1"><%= result.called_count_fe %></td>
+    <% FortUtil.fort_groups_se.each do |g| %>
+      <td class="span1"><%= result.called_count_for_group(g) %></td>
+    <% end %>
+    <td class="well span1"><%= result.called_count_se %></td>
+  <% when gvtype_te? %>
+    <% FortUtil.fort_groups_te.each do |g| %>
+      <td class="span1"><%= result.called_count_for_group(g) %></td>
+    <% end %>
+  <% end %>
+</tr>
+<tr>
+  <td class="span1">Ruled</td>
+  <td class="attention well span1"><%= result.ruled_count %></td>
+  <% case
+  when gvtype_fe? %>
+    <% FortUtil.fort_groups_fe.each do |g| %>
+      <td class="span1"><%= result.ruled_count_for_group(g) %></td>
+    <% end %>
+    <td class="well span1"><%= result.ruled_count_fe %></td>
+    <% FortUtil.fort_groups_se.each do |g| %>
+      <td class="span1"><%= result.ruled_count_for_group(g) %></td>
+    <% end %>
+    <td class="well span1"><%= result.ruled_count_se %></td>
+  <% when gvtype_te? %>
+    <% FortUtil.fort_groups_te.each do |g| %>
+      <td class="span1"><%= result.ruled_count_for_group(g) %></td>
+    <% end %>
+  <% end %>
+</tr>

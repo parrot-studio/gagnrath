@@ -1,0 +1,38 @@
+<%
+size = case
+when gvtype_fe?
+  12
+when gvtype_te?
+  6
+end
+%>
+<div class="row">
+  <div class="span<%= size %>">
+    <h4>Total</h4>
+    <table class="table table-condensed">
+      <thead>
+        <%= render 'result_table_header' %>
+      </thead>
+      <tbody>
+        <%= render 'result_table', result: total, dates: dates, header_type: :total, target: target %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% unless results.empty? %>
+  <div class="row">
+    <div class="span<%= size %>">
+      <h4>Dates</h4>
+      <table class="table table-condensed">
+        <thead>
+          <%= render 'result_table_header' %>
+        </thead>
+        <tbody>
+          <% results.sort_by(&:gvdate).reverse.each do |r| %>
+            <%= render 'result_table', result: r, dates: dates, header_type: :guild, target: target %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

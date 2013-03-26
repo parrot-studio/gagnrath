@@ -1,0 +1,84 @@
+<%
+rtable = @rulers.inject({}){|h, r| h[r.fort_code] = r; h}
+rdates = CacheData.result_dates
+bdate = rdates.select{|d| d < @date}.sort.reverse.first
+adate = rdates.select{|d| d > @date}.sort.first
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'result_header' %>
+      <li>
+        <%= link_to("#{divided_date(@date)}", result_dates_path) %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Forts</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <h3>Forts Result : <%= divided_date(@date) %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <table class="table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="span2"><br/></th>
+          <% fort_nums.each do |num| %>
+            <th class="span3"><%= num %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% fort_groups.each do |g| %>
+          <tr>
+            <th class="span2"><%= g %></th>
+            <% fort_nums.each do |num|
+              r = rtable["#{g}#{num}"]
+              if r %>
+                <td class="span3">
+                  <p>
+                    <small  class="muted"><%= r.fort_name %></small><br/>
+                    <small  class="muted"><%= r.formal_name %></small><br/>
+                    <strong><%= r.guild_name %></strong>
+                    <small>
+                      <%= link_to('★', result_total_guild_path(encode_for_url(r.guild_name))) %>
+                    </small>
+                  </p>
+                </td>
+              <% else %>
+                <td class="span3">-</td>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12 text-center">
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        <% if bdate %>
+          <%= link_to(raw("&laquo; #{divided_date(bdate)}"), result_forts_path(date: bdate), class: 'btn btn-primary') %>
+        <% else %>
+          <button class="btn disabled">&laquo &nbsp;&nbsp;&nbsp;Prev&nbsp;&nbsp;&nbsp;</button>
+        <% end %>
+      </div>
+      <div class="btn-group">
+        <%= link_to('Callers', result_callers_path(date: @date), class: 'btn btn-info') %>
+      </div>
+      <div class="btn-group">
+        <% if adate %>
+          <%= link_to(raw("#{divided_date(adate)}  &raquo;"), result_forts_path(date: adate), class: 'btn btn-primary') %>
+        <% else %>
+          <button class="btn disabled">&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp; &raquo;</button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

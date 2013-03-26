@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <li>
+        <%= link_to('Top', root_path) %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Strategy Room</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Strategy Room</h3>
+    <ul class="nav nav-tabs nav-stacked">
+      <li><%= link_to('Timeline', timeline_path) %></li>
+      <li><%= link_to('Result', result_path) %></li>
+      <% if updatable_mode? %>
+        <li><%= link_to('Admin Tools (need login)', admin_path) %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

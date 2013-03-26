@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'menu_crumb' %>
+      <li>login</li>
+    </ul>
+  </div>
+</div>
+<% error = flash[:error] %>
+<div class="row">
+  <div class="offset4 span4">
+    <%= form_tag(admin_login_path, method: :post, class: 'well') do %>
+      <fieldset class="control-group<%= ' error' if error %>">
+        <label><%= error || 'ログイン情報を入力してください' %></label>
+        <label>user</label>
+        <input type="text" name="user" value="" />
+        <label>pass</label>
+        <input type="password" name="pass" value="" />
+      </fieldset>
+      <button type="submit" class="btn">Login</button> or return to <%= link_to('Strategy Room', menu_path)  %>
+    <% end %>
+  </div>
+</div>

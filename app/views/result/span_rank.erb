@@ -1,0 +1,39 @@
+<%
+from = @dates.first
+to = @dates.last
+span_label = format_span(from, to)
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'result_header' %>
+      <li>
+        <%= link_to('Span', result_span_path) %> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <%= span_label %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Callers Ranking</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <h3>Callers Ranking : <%= span_label %> (<%= @dates.size %>weeks) <%= result_subtitle %></h3>
+  </div>
+</div>
+<% unless gvtype_te? %>
+  <div class="row">
+    <div class="offset6 span3">
+      priority : <%= link_to_unless(result_view_for_all?,  'Total', result_span_rank_path(from: from, to: to)) %>
+      / <%= link_to_unless(result_view_for_se?, 'SE', result_span_rank_path(from: from, to: to, priority: 'se')) %>
+      / <%= link_to_unless(result_view_for_fe?, 'FE', result_span_rank_path(from: from, to: to, priority: 'fe')) %>
+    </div>
+  </div>
+<% end %>
+<div class="row">
+  <div class="span9">
+    <hr/>
+  </div>
+</div>
+<%= render 'caller_ranking', callers: @callers, dates: @dates, target: :span %>

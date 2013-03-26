@@ -1,0 +1,63 @@
+<% view_target = params[:fort] %>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'timeline_header' %>
+      <li>
+        <%= link_to("#{divided_date(@gvdate)}", timeline_path(date: @gvdate)) %> <span class="divider">&gt;</span>
+      </li>
+      <li>Fort Timeline <span class="divider">&gt;</span></li>
+      <li class="active"><strong><%= view_target %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <h3>Fort Timeline : <%= view_target %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <table class="table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="span2"><%= divided_date(@gvdate) %></th>
+          <% @timeline.forts.each do |f| %>
+            <th class="span3"><%= f %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="span2 text-center">Start</td>
+          <% @timeline.forts.each do |f| %>
+            <td class="span3 attention text-center"><strong><%= @timeline.before_result[f] || '-' %></strong></td>
+          <% end %>
+        </tr>
+        <% @timeline.revs.each do |rev| %>
+          <tr>
+            <td class="span2 text-center">
+             <%= link_to(revision_to_format_time_only(rev), timeline_situation_path(date: @gvdate, rev: rev)) %>
+            </td>
+            <% @timeline.forts.each do |f|
+              c = @timeline.caller_for(rev, f)
+              unless c %>
+                <td class="span3 text-center"><small>↓</small></td>
+              <% else %>
+                <td class="span3 text-center">
+                  <%= link_to(c.guild_name, timeline_for_guild_path(date: @gvdate, name: encode_for_url(c.guild_name))) %>
+                </td>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
+        <tr>
+          <td class="span2 text-center">Result</td>
+          <% @timeline.forts.each do |f| %>
+            <td class="span3 attention text-center"><strong><%= @timeline.result[f] || '-' %></strong></td>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

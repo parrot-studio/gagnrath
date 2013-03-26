@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'result_header' %>
+      <li>
+        <%= link_to("#{divided_date(@date)}", result_dates_path) %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Callers</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <h3>Callers Ranking : <%= divided_date(@date) %> <%= result_subtitle %></h3>
+  </div>
+</div>
+<% unless gvtype_te? %>
+  <div class="row">
+    <div class="offset6 span3">
+      priority : <%= link_to_unless(result_view_for_all?,  'Total', result_callers_path(date: @date)) %>
+      / <%= link_to_unless(result_view_for_se?, 'SE', result_callers_path(date: @date, priority: 'se')) %>
+      / <%= link_to_unless(result_view_for_fe?, 'FE', result_callers_path(date: @date, priority: 'fe')) %>
+    </div>
+  </div>
+<% end %>
+<%= render 'caller_ranking', callers: @callers, target: :callers %>

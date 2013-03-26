@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'admin_header' %>
+      <li class="active"><strong>データバックアップ</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>データバックアップ</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span4">
+    <% if flash[:error] %>
+      <div class="alert alert-error">
+        <p>
+          <strong><%= flash[:error] %></strong>
+        </p>
+      </div>
+    <% else %>
+      <br/>
+    <% end %>
+  </div>
+  <div class="span2">
+    <%= form_tag(admin_backup_path, method: :post) do %>
+      <button type="submit" class="btn-mini btn-info">Start Backup</button>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <table class="table table-striped table-condensed">
+      <tbody>
+        <% @files.sort_by(&:revision).reverse.each do |d| %>
+          <tr>
+            <td class="span4">
+              <%= link_to(d.dump_time, admin_backup_file_path(rev: d.revision)) %>
+            </td>
+            <td class="span2">
+              <%= form_tag(admin_backup_file_path(rev: d.revision), method: :delete) do %>
+                <button type="submit" class="btn-mini btn-danger">Delete</button>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

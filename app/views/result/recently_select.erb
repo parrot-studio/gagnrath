@@ -1,0 +1,75 @@
+<% 
+opts = create_option_from_names(@names)
+recently_default = ServerSettings.data_size_recently
+size_range = ServerSettings.data_size_range
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'result_header' %>
+      <li class="active"><strong>Recently</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Recently Result</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <%= form_tag(result_recently_path, method: :post, class: 'form-inline') do %>
+      <div class="span5">
+        <fieldset>
+          <legend>Callers Ranking</legend>
+          <div class="form-actions">
+            <label class="control-label" for="recently-rank">Recent
+              <select id="recently-rank" name="recently-rank" class="span1">
+                <% size_range.each do |d| %>
+                  <option value="<%= d %>"<%= ' selected' if d.to_i == recently_default %>><%= d %></option>
+                <% end %>
+              </select>
+              weeks</label>
+            <button type="submit" class="btn btn-primary" name="for-rank" value="1">View</button>
+          </div>
+        </fieldset>
+      </div>
+      <div class="span5">
+        <fieldset>
+          <legend>Select Guild or Union</legend>
+          <p>
+            <small>
+              <% if params[:all] %>
+                <u>From : All</u>
+                (<%= link_to('Select from Recently Guilds', result_recently_path) %>)
+              <% else %>
+                <u>From : Recently <%= ServerSettings.data_size_recently %>weeks</u>
+                (<%= link_to('Select from All Guilds', result_recently_path(all: 1)) %>)
+              <% end %>
+            </small>
+          </p>
+          <% (1..8).each do |i| %>
+            <div class="control-group">
+              <label class="control-label" for="guild_<%= i %>">Guild <%= i %></label>
+              <div class="controls">
+                <select id="guild_<%= i %>" name="guild[]">
+                  <%= raw opts %>
+                </select>
+              </div>
+            </div>
+          <% end %>
+          <div class="form-actions">
+            <label class="control-label" for="recently-guild">Recent
+              <select id="recently-guild" name="recently-guild" class="span1">
+                <% size_range.each do |d| %>
+                  <option value="<%= d %>"<%= ' selected' if d.to_i == recently_default %>><%= d %></option>
+                <% end %>
+              </select>
+              weeks</label>
+            <button type="submit" class="btn btn-primary" name="for-guild" value="1">View</button>
+          </div>
+        </fieldset>
+      </div>
+    <% end %>
+  </div>
+</div>

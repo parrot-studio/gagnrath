@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'timeline_header' %>
+      <li>
+        <%= link_to("#{divided_date(@gvdate)}", timeline_path(date: @gvdate)) %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Situation</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Situations : <%= divided_date(@gvdate) %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <ul class="nav nav-tabs nav-stacked">
+      <% @revs.each do |r| %>
+        <li><%= link_to(revision_to_format_time_only(r), timeline_situation_path(date: @gvdate, rev: r)) %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

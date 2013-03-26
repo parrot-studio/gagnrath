@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'menu_crumb' %>
+      <li>
+        管理メニュー
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>管理メニュー</h3>
+    <ul class="nav nav-tabs nav-stacked">
+      <li><%= link_to('データバックアップ', admin_backup_path) %></li>
+      <li><%= link_to('結果集計管理', admin_result_path) %></li>
+      <li><%= link_to('手動結果入力', admin_rulers_path) %></li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,139 @@
+<%
+date = Date.parse(@date)
+case
+when gvtype_fe?
+  valid = date.sunday? ? true : false
+  dname = '日曜日'
+when gvtype_te?
+  valid = date.saturday? ? true : false
+  dname = '土曜日'
+end
+
+forts = @rulers.inject({}){|h, r| h[r.fort_code] = r; h}
+@manuals.each do |m|
+  next if forts[m.fort_code]
+  forts[m.fort_code] = m
+end
+manual = @rulers.empty? ? true : false
+%>
+
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'admin_header' %>
+      <li>
+        <%= link_to('結果手動入力', admin_rulers_path) %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= divided_date(@date) %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>結果手動入力 : <%= divided_date(@date) %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <% case
+    when flash[:error] %>
+      <div class="alert alert-error">
+        <p>
+          <strong><%= flash[:error] %></strong>
+        </p>
+      </div>
+    <% when flash[:info] %>
+      <div class="alert alert-success">
+        <p>
+          <%= flash[:info] %>
+        </p>
+      </div>
+    <% when !manual %>
+      <div class="alert">
+        <p>
+          自動集計された結果は手動で修正できません
+        </p>
+      </div>
+    <% when manual && !valid %>
+      <div class="alert">
+        <p>
+          <strong><%= divided_date(@date) %></strong>は<%= dname %>ではありません<br/>
+          誤って指定した場合は<%= link_to('戻って選び直してください', admin_rulers_path) %>
+        </p>
+      </div>
+    <% else %>
+      <br/>
+    <% end %>
+  </div>
+  <div class="offset5 span1">
+    <% if manual %>
+      <p>
+        <a href="#delete" role="button" class="btn btn-danger" data-toggle="modal">Delete</a>
+      </p>
+      <div id="delete" class="modal hide fade">
+        <div class="modal-header">
+          <h3>手動入力データ削除</h3>
+        </div>
+        <div class="modal-body">
+          <p>
+            手動入力した結果を削除します。よろしいですか？
+          </p>
+        </div>
+        <div class="modal-footer">
+          <%= form_tag(admin_rulers_data_path(date: @date), method: :delete, class: 'form-inline') do %>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">キャンセル</button>
+            <button type="submit" class="btn btn-danger">削除</button>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= form_tag(admin_rulers_data_path(date: @date), method: :put, class: 'form-inline') do %>
+  <div class="row">
+    <div class="span12">
+      <table class="table-striped table-bordered">
+        <thead>
+          <tr>
+            <th class="span2"><br/></th>
+            <% fort_nums.each do |num| %>
+              <th class="span3"><%= num %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% fort_groups.each do |g| %>
+            <tr>
+              <th class="span2"><%= g %></th>
+              <% fort_nums.each do |num|
+                fcd = "#{g}#{num}"
+                r = forts[fcd] %>
+                <td class="span3">
+                  <% if manual %>
+                    <input type="text" class="input-medium" name="<%= "gname[#{fcd}]" %>" value="<%= r ? r.guild_name : '' %>"/>
+                  <% else %>
+                    <p>
+                      <%= ((r.nil? || r.guild_name.blank?) ? '-' : r.guild_name) %>
+                    </p>
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="offset5 span3">
+      <% if manual %>
+        <button type="submit" class="btn btn-primary">更新</button>
+      <% else %>
+        <button class="btn disabled" disabled>更新</button>
+      <% end %>
+      <%= link_to('戻る', admin_rulers_path, class: 'btn btn-info') %>
+    </div>
+  </div>
+<% end %>

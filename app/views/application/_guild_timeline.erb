@@ -1,0 +1,77 @@
+<div class="row">
+  <div class="span<%= timeline_span_size %>">
+    <table class="table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th class="span2"><%= divided_date(date) %></th>
+          <% fort_groups.each do |g| %>
+            <th colspan="<%= fort_nums.size %>">
+              <%= link_to(g, timeline_for_fort_path(date: date, fort: g)) %>
+            </th>
+          <% end %>
+        </tr>
+        <tr>
+          <th><br/></th>
+          <% fort_groups.size.times do %>
+            <% fort_nums.each do |num| %>
+              <th class="span1"><%= num %></th>
+            <% end %>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="span2 text-center">Start</td>
+          <% each_fort_code do |fcd|
+            be = timeline.before_result[fcd]
+            if be %>
+              <td class="span1 attention text-center guild-owner">
+                <strong><%= name_table[be] %></strong>
+              </td>
+            <% else %>
+              <td class="span1 text-center"><small>-</small></td>
+            <% end %>
+          <% end %>
+        </tr>
+        <% timeline.revs.each do |rev| %>
+          <tr>
+            <td class="span2 text-center">
+              <%= link_to(revision_to_format_time_only(rev), timeline_situation_path(date: date, rev: rev)) %>
+            </td>
+            <% each_fort_code do |fcd|
+              state = timeline.state_for(rev, fcd)
+              unless state %>
+                <td class="span1 text-center"><small>-</small></td>
+              <% else
+                case state.first
+                when :call %>
+                  <td class="span1 text-center guild-owner"><%= name_table[state.last] %></td>
+                <% when :stay %>
+                  <td class="span1 text-center guild-stay"><small>↓</small></td>
+                <% when :lose %>
+                  <td class="span1 text-center guild-lose"><small>×</small></td>
+                <% else %>
+                  <td class="span1 text-center"><small>-</small></td>
+                <% end %>
+                </td>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
+        <tr>
+          <td class="span2 text-center">Result</td>
+          <% each_fort_code do |fcd|
+            rsl = timeline.result[fcd] %>
+            <% if rsl %>
+              <td class="span1 attention text-center guild-owner">
+                <strong><%= name_table[rsl] %></strong>
+              </td>
+            <% else %>
+              <td class="span1 text-center"><small>-</small></td>
+            <% end %>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

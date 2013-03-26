@@ -1,0 +1,38 @@
+<%
+from = @dates.first
+to = @dates.last
+span_label = format_span(from, to)
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'result_header' %>
+      <li>
+        <%= link_to('Span', result_span_path) %> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <%= span_label %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Union</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <h3><%= span_label %> (<%= @dates.size %>weeks) Result : Union</h3>
+    <ul class="unstyled">
+      <li class="union">Guild : </li>
+      <% @names.each do |n| %>
+        <li class="union">
+          <%= link_to(n, result_span_guild_path(from: from, to: to, name: encode_for_url(n))) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <hr/>
+  </div>
+</div>
+<%= render 'union_result', results: @results, total: @total, dates: @dates, target: :span %>

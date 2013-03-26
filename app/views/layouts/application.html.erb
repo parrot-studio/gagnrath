@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% if @reload %>
+      <meta http-equiv="Refresh" content="<%= @reload %>" />
+    <% end %>
+    <%= stylesheet_link_tag    "application", media: "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <title>Gagnrath for <%= server_name %></title>
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <%= render 'topnav' %>
+    <div class="container">
+      <%= yield %>
+    </div>
+    <hr>
+    <footer>
+      <p class="text-center">
+        "Gagnrath - ROGv : Forts Watching System" by <a href="https://twitter.com/parrot_studio/">@parrot_studio</a> 2012-2013
+      </p>
+      <%= render 'sample_footer' if sample_mode? %>
+    </footer>
+  </body>
+</html>

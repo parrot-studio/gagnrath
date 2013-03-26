@@ -1,0 +1,34 @@
+<%
+names = @timeline.guilds
+name_table = create_name_table(names)
+gname = (names.size == 1 ? names.first : 'Union')
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'timeline_header' %>
+      <li>
+        <%= link_to("#{divided_date(@gvdate)}", timeline_path(date: @gvdate)) %> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <%= link_to("Guild", timeline_union_path(date: @gvdate)) %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= gname %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <h3><%= "#{gname} : #{divided_date(@gvdate)}" %></h3>
+    <% if names.size > 1 %>
+      <ul class="unstyled">
+        <% name_table.each do |k, v| %>
+          <li class="union">
+            <%= v %> :  <%= link_to(k, timeline_for_guild_path(date: @gvdate, name: encode_for_url(k))) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+<%= render 'guild_timeline', timeline: @timeline, name_table: name_table, date: @gvdate %>

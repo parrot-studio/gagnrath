@@ -1,0 +1,87 @@
+<%
+opts = create_option_from_names(@names)
+from_default = @dates[ServerSettings.data_size_recently - 1]
+result_range = ServerSettings.data_size_range
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= render 'result_header' %>
+      <li class="active"><strong>Span</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Span Result</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <%= form_tag(result_span_path, method: :post, class: 'form-inline') do %>
+      <div class="span6">
+        <fieldset>
+          <legend>Callers Ranking</legend>
+          <div class="form-actions">
+            <label class="control-label" for="span-from-rank">from : </label>
+            <select id="span-from-all" name="span-from-rank" class="span2">
+              <% @dates.each do |d| %>
+                <option value="<%= d %>"<%= ' selected' if d == from_default %>><%= divided_date(d) %></option>
+              <% end %>
+            </select>
+            <label class="control-label" for="span-to-rank">to : </label>
+            <select id="span-to-all" name="span-to-rank" class="span2">
+              <% @dates.each do |d| %>
+                <option value="<%= d %>"><%= divided_date(d) %></option>
+              <% end %>
+            </select>
+            <button type="submit" class="btn btn-primary" name="for-rank" value="1">View</button>
+            <p><small>min : <%= result_range.min %>weeks / max : <%= result_range.max %>weeks</small></p>
+          </div>
+        </fieldset>
+      </div>
+      <div class="span6">
+        <fieldset>
+          <legend>Select Guild or Union</legend>
+          <p>
+            <small>
+              <% if params[:all] %>
+                <u>From : All</u>
+                (<%= link_to('Select from Recently Guilds', result_span_path) %>)
+              <% else %>
+                <u>From : Recently <%= ServerSettings.data_size_recently %>weeks</u>
+                (<%= link_to('Select from All Guilds', result_span_path(all: 1)) %>)
+              <% end %>
+            </small>
+          </p>
+          <% (1..8).each do |i| %>
+            <div class="control-group">
+              <label class="control-label" for="guild_<%= i %>">Guild <%= i %></label>
+              <div class="controls">
+                <select id="guild_<%= i %>" name="guild[]">
+                  <%= raw opts %>
+                </select>
+              </div>
+            </div>
+          <% end %>
+          <div class="form-actions">
+            <label class="control-label" for="span-from-guild">from : </label>
+            <select id="span-from-guild" name="span-from-guild" class="span2">
+              <% @dates.each do |d| %>
+                <option value="<%= d %>"<%= ' selected' if d == from_default %>><%= divided_date(d) %></option>
+              <% end %>
+            </select>
+            <label class="control-label" for="span-to-guild">to : </label>
+            <select id="span-to-guild" name="span-to-guild" class="span2">
+              <% @dates.each do |d| %>
+                <option value="<%= d %>"><%= divided_date(d) %></option>
+              <% end %>
+            </select>
+            <button type="submit" class="btn btn-primary" name="for-guild" value="1">View</button>
+            <p><small>min : <%= result_range.min %>weeks / max : <%= result_range.max %>weeks</small></p>
+          </div>
+        </fieldset>
+      </div>
+    <% end %>
+  </div>
+</div>
