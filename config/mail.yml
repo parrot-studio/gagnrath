@@ -7,16 +7,16 @@ production:
     password:
     authentication: :plain
     enable_starttls_auto: true
-  dump_sender:
+  admin:
     from:
     to:
 development:
   delivery_method: test
-  dump_sender:
+  admin:
     from: hoge@example.com
     to: piyo@example.com
 test:
   delivery_method: test
-  dump_sender:
+  admin:
     from: hoge@example.com
     to: piyo@example.com

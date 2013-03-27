@@ -76,7 +76,7 @@ class Dumper
   end
 
   def send_mail
-    m = DumpSender.backup(archive_file_path)
+    m = AdminMailer.dump_backup(archive_file_path)
     m.deliver if m
     m
   end

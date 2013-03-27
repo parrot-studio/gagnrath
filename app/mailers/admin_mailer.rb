@@ -1,11 +1,11 @@
 # coding: utf-8
-class DumpSender < ActionMailer::Base
+class AdminMailer < ActionMailer::Base
 
   def env_test
     create_mail("Gagnrathテストメール")
   end
 
-  def backup(file_path)
+  def dump_backup(file_path)
     return unless File.exists?(file_path)
     file = File.new(file_path)
     return unless file
@@ -22,8 +22,8 @@ class DumpSender < ActionMailer::Base
 
   def create_mail(subject)
     m = mail(
-      :from => MailSettings.dump_sender.from,
-      :to => MailSettings.dump_sender.to,
+      :from => MailSettings.admin.from,
+      :to => MailSettings.admin.to,
       :subject => subject
     )
     m.transport_encoding = '8bit'
