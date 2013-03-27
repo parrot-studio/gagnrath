@@ -2,7 +2,7 @@
   <div class="span6">
     <legend>Selected Histroy</legend>
     <ol>
-      <% union_history.each do |gs| %>
+      <% union_history.reverse.each do |gs| %>
         <li><a href="#" class="histroy" data-list="<%= gs.join("\t") %>"><%= gs.join(' , ') %></a></li>
       <% end %>
     </ol>

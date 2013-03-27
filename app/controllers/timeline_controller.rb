@@ -72,6 +72,7 @@ class TimelineController < ApplicationController
       (redirect_to timeline_path(date: date); return) unless CacheData.guild_names_for_date(date).include?(gname)
       @timeline = GuildTimeline.build(date, gname)
       (redirect_to timeline_path(date: date); return) unless @timeline
+      add_union_histroy(gname) unless ServerSettings.only_union_histroy?
     end
   end
 
@@ -153,6 +154,7 @@ class TimelineController < ApplicationController
 
     @timelines = @dates.inject({}){|h, d| h[d] = GuildTimeline.build(d, gname); h}
     @names = [gname]
+    add_union_histroy(gname) unless ServerSettings.only_union_histroy?
 
     render :span_union
   end

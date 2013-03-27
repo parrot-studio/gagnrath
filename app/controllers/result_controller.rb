@@ -73,6 +73,7 @@ class ResultController < ApplicationController
     (redirect_to result_total_path; return) unless CacheData.guild_names_for_all.include?(@gname)
     @results = GuildResult.for_guild(@gname)
     @total = GuildResult.combine(@results)
+    add_union_histroy(@gname) unless ServerSettings.only_union_histroy?
   end
 
   def total_union
@@ -129,7 +130,8 @@ class ResultController < ApplicationController
       @gname = decode_for_url(params[:name])
       (redirect_to result_recently_path; return) unless CacheData.guild_names_for_all.include?(@gname)
       @results = GuildResult.for_guild(@gname).for_date(dates)
-      @total = GuildResult.combine(@results)      
+      @total = GuildResult.combine(@results)
+      add_union_histroy(@gname) unless ServerSettings.only_union_histroy?
     end
   end
 
@@ -190,7 +192,8 @@ class ResultController < ApplicationController
       @gname = decode_for_url(params[:name])
       (redirect_to result_span_path; return) unless CacheData.guild_names_for_all.include?(@gname)
       @results = GuildResult.for_guild(@gname).for_date(dates)
-      @total = GuildResult.combine(@results)     
+      @total = GuildResult.combine(@results)
+      add_union_histroy(@gname) unless ServerSettings.only_union_histroy?
     end
   end
 

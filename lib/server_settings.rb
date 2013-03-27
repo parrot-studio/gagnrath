@@ -100,8 +100,12 @@ class ServerSettings < Settingslogic
     end
 
     def union_histroy_size
-      size = self.env.union_histroy_size
+      size = self.env.union_histroy.max_size
       size.to_i > 0 ? size : 10
+    end
+
+    def only_union_histroy?
+      self.env.union_histroy.only_union ? true : false
     end
 
   end

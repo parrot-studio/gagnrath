@@ -73,9 +73,11 @@ class ApplicationController < ActionController::Base
   end
   
   def add_union_histroy(guilds)
+    gs = [guilds].flatten.uniq.compact
+    return if gs.empty?
     orgs = union_history(raw: true)
-    str = guilds.join("\t")
-    return if orgs.include?(str)
+    str = gs.join("\t")
+    orgs.delete(str)
     orgs << str
     size = ServerSettings.union_histroy_size
     list = orgs.size > size ? orgs.reverse.take(size).reverse : orgs
