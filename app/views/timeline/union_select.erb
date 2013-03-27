@@ -1,4 +1,3 @@
-<% opts = create_option_from_names(@names) %>
 <div class="row">
   <div class="span12">
     <ul class="breadcrumb">
@@ -10,25 +9,15 @@
     </ul>
   </div>
 </div>
-<div class="row">
-  <div class="span6">
-    <%= form_tag(timeline_union_path(date: @gvdate), method: :post, class: 'form-horizontal') do %>
-      <fieldset>
-        <legend>Select Guild or Union (<%= divided_date(@gvdate) %>)</legend>
-        <% (1..8).each do |i| %>
-          <div class="control-group">
-            <label class="control-label" for="guild_<%= i %>">Guild <%= i %></label>
-            <div class="controls">
-              <select id="guild_<%= i %>" name="guild[]">
-                <%= raw opts %>
-              </select>
-            </div>
-          </div>
-        <% end %>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">View Timeline</button>
-        </div>
-      </fieldset>
-    <% end %>
+<%= form_tag(timeline_union_path(date: @gvdate), method: :post, class: 'form-inline') do %>
+  <div class="row">
+    <div class="span6">
+      <legend>Select Guild or Union (<%= divided_date(@gvdate) %>)</legend>
+      <%= render 'guild_select', opts: create_option_from_names(@names) %>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">View Timeline</button>
+      </div>
+    </div>
+    <%= render 'union_history' %>
   </div>
-</div>
+<% end %>

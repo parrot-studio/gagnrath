@@ -13,6 +13,7 @@ production:
     timeline:
       span_max_size: 4
     use_mail: false
+    union_histroy_size: 10
   memcache:
     server: localhost:11211
     namespace: hoge
@@ -45,6 +46,7 @@ development:
     timeline:
       span_max_size: 4
     use_mail: false
+    union_histroy_size: 10
   memcache:
     server: localhost:11211
     namespace: devel
@@ -77,6 +79,7 @@ test:
     timeline:
       span_max_size: 4
     use_mail: false
+    union_histroy_size: 10
   memcache:
     server: localhost:11211
     namespace: test

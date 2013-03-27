@@ -12,7 +12,8 @@ class ApplicationController < ActionController::Base
     rescue_from Exception, with: :server_error
   end
 
-  helper_method :sample_mode?, :view_mode?, :updatable_mode?, :encode_for_url
+  helper_method :sample_mode?, :view_mode?, :updatable_mode?, :encode_for_url,
+    :union_history, :create_union_code
 
   private
 
@@ -69,6 +70,39 @@ class ApplicationController < ActionController::Base
 
   def server_error
     render template: 'root/error', status: 500
+  end
+  
+  def add_union_histroy(guilds)
+    orgs = union_history(raw: true)
+    str = guilds.join("\t")
+    return if orgs.include?(str)
+    orgs << str
+    size = ServerSettings.union_histroy_size
+    list = orgs.size > size ? orgs.reverse.take(size).reverse : orgs
+    set_union_histroy(list)
+  end
+
+  def set_union_histroy(list)
+    val = (list || []).to_json
+    cookies[:union_history] = {
+      value: val,
+      expires: 14.days.from_now
+    }
+  end
+
+  def reset_union_histroy
+    cookies[:union_history] = nil
+  end
+
+  def union_history(raw: false)
+    begin
+      return [] unless cookies[:union_history]
+      list = JSON.parse(cookies[:union_history])
+      return list if raw
+      list.map{|str| str.split("\t")}
+    rescue
+      []
+    end
   end
 
 end

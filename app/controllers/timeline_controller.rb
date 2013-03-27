@@ -109,6 +109,7 @@ class TimelineController < ApplicationController
 
       @timeline = GuildTimeline.build(date, gs)
       redirect_to timeline_path(date: date) unless @timeline
+      add_union_histroy(gs)
       render :guild
     end
   end
@@ -183,6 +184,7 @@ class TimelineController < ApplicationController
     end
 
     @timelines = @dates.inject({}){|h, d| h[d] = GuildTimeline.build(d, @names); h}
+    add_union_histroy(@names)
   end
 
   private

@@ -1,0 +1,11 @@
+<% unless union_history.empty? %>
+  <div class="span6">
+    <legend>Selected Histroy</legend>
+    <ol>
+      <% union_history.each do |gs| %>
+        <li><a href="#" class="histroy" data-list="<%= gs.join("\t") %>"><%= gs.join(' , ') %></a></li>
+      <% end %>
+    </ol>
+    <%= link_to('Reset Histroy', union_histroy_path, method: :delete) %>
+  </div>
+<% end %>

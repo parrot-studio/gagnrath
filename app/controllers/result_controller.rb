@@ -88,6 +88,7 @@ class ResultController < ApplicationController
 
     @results = @names.map{|g| GuildResult.totalize_for_guild(g)}
     @total = GuildResult.combine(@results)
+    add_union_histroy(@names)
   end
 
   def recently_select
@@ -146,6 +147,7 @@ class ResultController < ApplicationController
 
       @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: dates)}
       @total = GuildResult.combine(@results)
+      add_union_histroy(@names)
     end
   end
 
@@ -206,6 +208,7 @@ class ResultController < ApplicationController
 
       @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: dates)}
       @total = GuildResult.combine(@results)
+      add_union_histroy(@names)
     end
   end
 

@@ -12,6 +12,7 @@ Gagnrath::Application.routes.draw do
   get  'sr'     => 'root#menu', as: :menu
   get  'latest' => 'root#latest'
   post 'latest' => 'root#latest'
+  delete  'union_histroy' => 'root#delete_union_histroy'
 
   get    't'                 => 'timeline#index',     as: :timeline
   get    't/d/:date'         => 'timeline#revs',      as: :timeline_revs

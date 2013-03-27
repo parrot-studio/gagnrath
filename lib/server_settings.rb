@@ -99,6 +99,11 @@ class ServerSettings < Settingslogic
       self.env.use_mail ? true : false
     end
 
+    def union_histroy_size
+      size = self.env.union_histroy_size
+      size.to_i > 0 ? size : 10
+    end
+
   end
 
 end
