@@ -20,8 +20,10 @@ Install
 - git clone https://github.com/parrot-studio/gagnrath
 - cd gagnrath
 - vi config/setting.yml
+- (DB setting)
 - vi config/database.yml
 - bundle
+- rake db:migrate
 - rails s
 
 EAQ(Expected Asked Questions)

@@ -7,6 +7,7 @@ gem 'mysql2'
 gem 'settingslogic'
 gem 'dalli'
 gem 'httpclient'
+gem 'therubyracer'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -44,7 +45,7 @@ gem 'jbuilder', '~> 1.0.1'
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # Use unicorn as the app servergem 'unicorn'
-gem 'unicorn'
+#gem 'unicorn'
 
 # Deploy with Capistrano
 # gem 'capistrano', group: :development

@@ -15,12 +15,13 @@ class AdminController < ApplicationController
 
   def add_session
     clear_session
-    unless valid_admin?(params[:user], params[:pass])
+    (redirect_to root_path; return) unless updatable_mode?
+    unless valid_admin?(params[:user], params[:password])
       flash[:error] = 'ユーザ名かパスワードが誤っています'
       redirect_to admin_login_path
       return
     end
-    login_for(params[:user])
+    update_session
     redirect_to admin_path
   end
 
@@ -168,6 +169,10 @@ class AdminController < ApplicationController
 
   private
 
+  def admin_user
+    ServerSettings.auth.admin.user
+  end
+
   def check_login
     (redirect_to root_path; return false) unless updatable_mode?
     unless logined?
@@ -176,41 +181,41 @@ class AdminController < ApplicationController
       return false
     end
 
+    update_session
     true
   end
 
   def logined?
     hash = session[:hash]
-    return false unless hash
-    hash == create_hash(session[:user], session[:seed]) ? true : false
-  end
-
-  def valid_admin?(user, pass)
-    admin_auth = ServerSettings.auth.admin
-    return false unless admin_auth.user == user
-    return false unless admin_auth.pass == pass
+    time = session[:time]
+    return false if (hash.blank? || time.blank?)
+    return false unless hash == create_hash(admin_user, time)
+    return false if Time.now.to_i - time.to_i > ServerSettings.memcache_expire_time
     true
   end
 
-  def login_for(user)
-    return unless user
-    seed = SecureRandom.hex(12)
-    session[:user] = user
-    session[:seed] = seed
-    session[:hash] = create_hash(user, seed)
-    nil
+  def valid_admin?(user, pass)
+    return false unless admin_user == user
+    return false unless ServerSettings.auth.admin.pass == pass
+    true
+  end
+
+  def update_session
+    time = Time.now.to_i
+    session[:time] = time
+    session[:hash] = create_hash(admin_user, time)
+    time
   end
 
   def clear_session
-    session.delete(:user)
-    session.delete(:seed)
+    session.delete(:time)
     session.delete(:hash)
     nil
   end
 
   def create_hash(user, seed)
     return unless (user && seed)
-    s = "#{user}-#{Rails.application.config.secret_key_base}-#{seed}"
+    s = "#{user}-#{ServerSettings.secret_key_base}-#{seed}"
     Digest::SHA1.hexdigest(s)
   end
 
