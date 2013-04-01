@@ -86,10 +86,12 @@ class ApplicationController < ActionController::Base
 
   def set_union_histroy(list)
     val = (list || []).to_json
-    cookies[:union_history] = {
+    cookie_params = {
       value: val,
       expires: 14.days.from_now
     }
+    cookie_params[:path] = ServerSettings.app_path unless ServerSettings.app_path.blank?
+    cookies[:union_history] = cookie_params
   end
 
   def reset_union_histroy

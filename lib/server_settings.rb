@@ -6,6 +6,10 @@ class ServerSettings < Settingslogic
 
   class << self
 
+    def app_path
+      self.env.app_path || ''
+    end
+
     def secret_key_base
       base = self.env.secret_key_base
       if base.blank? || base.size < 30
