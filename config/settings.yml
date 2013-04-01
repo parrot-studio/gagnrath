@@ -30,10 +30,6 @@ production:
       pass: mohumohu
     update_key: hogepiyo
     delete_key: fizzbuzz
-  viewer:
-    host: localhost
-    port: 3000
-    path:
 development:
   env:
     app_path:
@@ -66,10 +62,6 @@ development:
       pass: mohumohu
     update_key: hogepiyo
     delete_key: fizzbuzz
-  viewer:
-    host: localhost
-    port: 3000
-    path:
 test:
   env:
     app_path:
@@ -102,7 +94,3 @@ test:
       pass: mohumohu
     update_key: hogepiyo
     delete_key: fizzbuzz
-  viewer:
-    host: localhost
-    port: 3000
-    path:

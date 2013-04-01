@@ -92,13 +92,6 @@ class ServerSettings < Settingslogic
       val
     end
 
-    def viewer_target
-      t = "#{self.viewer.host}"
-      t << ":#{self.viewer.port}" unless self.viewer.port.blank?
-      t << "#{self.viewer.path}" unless self.viewer.path.blank?
-      t
-    end
-
     def use_mail?
       self.env.use_mail ? true : false
     end

@@ -15,6 +15,19 @@ guilds = GuildResult.for_date(date)
 
 exit if rulers.empty? && guilds.empty?
 
+class ViewerSettings < Settingslogic
+  source File.expand_path('../../../config/viewer.yml', __FILE__)
+  namespace Rails.env
+  load!
+
+  def target
+    t = "#{self.viewer.host}"
+    t << ":#{self.viewer.port}" unless self.viewer.port.blank?
+    t << "#{self.viewer.path}" unless self.viewer.path.blank?
+    t
+  end
+end
+
 data = {}
 data['gv_date'] = date
 
@@ -40,7 +53,7 @@ data['guilds'] = guilds.map do |gr|
 end
 
 c = HTTPClient.new
-res = c.post("http://#{ServerSettings.viewer_target}/update", :result => data.to_json)
+res = c.post("http://#{ViewerSettings.target}/update", :result => data.to_json)
 raise "update error" unless HTTP::Status.successful?(res.status)
 
 exit
