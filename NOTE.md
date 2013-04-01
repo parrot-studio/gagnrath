@@ -10,6 +10,7 @@ READMEには書きたくないが、一応まとめないと困る何か
 作者が追いつかないものを他の人が扱えるかというのも微妙なので、
 「ここ」にメモっておく方向で
 
+
 Data convert from old ROGv
 ---------------
 - cd [old rogv dir]
@@ -19,6 +20,7 @@ Data convert from old ROGv
 - rails r bin/app/importer.rb [export file path]
 
 詳しくはROGvとGagnrathそれぞれのスクリプトの使い方を参照
+
 
 3つのモード
 ---------------
@@ -63,14 +65,18 @@ config/settings.yml
 
 #### 詳細
 - env : 環境設定
+ - app\_path : サーバroot以外に設置した場合、そのpathを記述（例：/sample）
  - secret\_key\_base : Railsのセッション生成に使われる文字列。"rake secret"を実行して文字列を生成
- - server\_name : RO的な意味でのサーバ名。表示に使う
+ - server\_name : RO的な意味でのサーバ名。表示にのみ使用
  - gvtype: "FE"を指定するとFE/SEモード、"TE"を指定するとTEモードで動作
  - sample\_mode view\_mode : モード説明参照
  - attention\_minitues : 砦viewで強調表示するためのuptime。現在交戦中の可能性が高い場所を区別
  - data\_size/recently : 集計で「最近のn週」のnに入る値
  - data\_size/min\_size data\_size/max\_size : 集計表示の最小/最大データ数。負荷を考えて指定
  - timeline/span\_max\_size : 期間タイムラインにおいて指定可能な最大データ数。負荷を考えて指定
+ - use\_mail : メール送信を使用するかの設定。mail.ymlの設定が必須
+ - union\_histroy/max\_size : ギルド/勢力履歴の最大サイズ。大きくしすぎるとcookieに収まらない（4KB制限）
+ - union\_histroy/only\_union : ギルド/勢力履歴で複数ギルドのみを格納するか。falseだと単体ギルドも履歴に含む
 - memcache : memcachedへの接続情報
  - server : memcachedのサーバ（例：localhost:11211）
  - header : memcached上の名前空間。同じものを指定するとキャッシュが混在する
@@ -83,11 +89,33 @@ config/settings.yml
 - viewer : rogv_viewerへの接続情報（設定不要）
 
 
+config/mail.yml
+---------------
+#### 概要
+- setting.ymlで「use\_mail:true」の場合のみ設定必須
+- YAML形式で記述
+- デフォルトでGmailを利用する場合の設定を記述済み
+ - user\_name : 自分のGmailアドレスを記述
+ - password : 自分のGmailパスワードを記述（二段階認証の場合はアプリケーションPASS）
+ - admin/from admin/to : 自分のGmailアドレスを記述
+- bin/app/mail_env_test.rbで動作確認可能
+ - メールが届けばOK
+- 詳しくはRailsの説明参照 http://guides.rubyonrails.org/action_mailer_basics.html
+- それでもわからなければメール機能は使わない方が
+
+#### 詳細
+- delivery_method : smtp / sendmail / test から選択
+- smtp_settings : smtpを指定した場合の設定項目。それ以外の場合は項目自体が不要
+- sendmail_settings : sendmailを指定した場合の設定項目。それ以外の場合は項目自体が不要
+- admin/from admin/to : 送信元・送信先メールアドレス。通常は両方とも管理者のメールアドレス
+
+
 スクリプト（bin/app/以下）
 ---------------
 #### 概要
 - cronで各種処理を実行するためのもの
 - 「rails r」コマンドで実行する
+ - "rails r bin/app/mail_env_test.rb -e production" 等
 - 管理系で同じことができるが、cronが使えるなら自動化できる
 - 「RAILS_ENV=production」指定のかわりに「-e production」指定が可能
 - おそらく設置ディレクトリにcdしてから実行しないとおかしくなるかも
@@ -117,6 +145,11 @@ MariaDB(MySQL)のデータをdumpして固める。データは「dump/」以下
 - -e ENV/--env=ENV：実行環境指定（デフォルトはdevelopment）
 - -d DATE/--date=DATE：指定日のみをimport（指定がなければディレクトリに存在する全て）
 
+#### mail_env_test.rb
+テストメールを送信する。設定の確認に使用
+
+- -e ENV/--env=ENV：実行環境指定（デフォルトはdevelopment）
+
 
 その他
 ---------------
@@ -130,6 +163,5 @@ MariaDB(MySQL)のデータをdumpして固める。データは「dump/」以下
 TODO
 ---------------
 - 共有ファイルUpload（リプレイなど）
-- dumpの外部送信（メール等）
-- cookieにunion選択履歴を保存して選択できるように
 - viewerを一から再構築（TEのも見られるように）
+- dumpが一定数を超えたら古いものから削除
