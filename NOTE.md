@@ -114,27 +114,6 @@ config/viewer.yml
 設定不要。旧rogv_viewerへの転送に使用。後日削除予定
 
 
-config/mail.yml
----------------
-#### 概要
-- setting.ymlで「use\_mail:true」の場合のみ設定必須
-- YAML形式で記述
-- デフォルトでGmailを利用する場合の設定を記述済み
- - user\_name : 自分のGmailアドレスを記述
- - password : 自分のGmailパスワードを記述（二段階認証の場合はアプリケーションPASS）
- - admin/from admin/to : 自分のGmailアドレスを記述
-- bin/app/mail_env_test.rbで動作確認可能
- - メールが届けばOK
-- 詳しくはRailsの説明参照 http://guides.rubyonrails.org/action_mailer_basics.html
-- それでもわからなければメール機能は使わない方が
-
-#### 詳細
-- delivery_method : smtp / sendmail / test から選択
-- smtp_settings : smtpを指定した場合の設定項目。それ以外の場合は項目自体が不要
-- sendmail_settings : sendmailを指定した場合の設定項目。それ以外の場合は項目自体が不要
-- admin/from admin/to : 送信元・送信先メールアドレス。通常は両方とも管理者のメールアドレス
-
-
 スクリプト（bin/app/以下）
 ---------------
 #### 概要

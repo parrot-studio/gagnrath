@@ -26,7 +26,7 @@
                 <td class="span3">
                   <p>
                     <% if unlink %>
-                      <small class="muted"><%= f.fort_name %></small><br/>
+                      <small class="muted"><%= ServerSettings.gvtype_te? ? f.formal_name : f.fort_name %></small><br/>
                     <% else %>
                       <small class="muted">
                         <%= link_to(f.fort_name, timeline_for_fort_path(date: situation.gvdate, fort: g)) %>
