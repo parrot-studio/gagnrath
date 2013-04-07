@@ -51,11 +51,11 @@ class AdminController < ApplicationController
   end
 
   def result
-    @dates = Situation.gvdates.reverse
+    @dates = [Situation.gvdates, Ruler.gvdates].flatten.uniq.sort.compact.reverse
   end
 
   def add_result
-    sdates = Situation.gvdates
+    sdates = [Situation.gvdates, Ruler.gvdates].flatten.uniq.sort.compact
     date = params['add-date']
     dates = if date
       sdates.include?(date) ? [date] : []

@@ -11,7 +11,7 @@ opt.parse!(ARGV)
 
 RAILS_ENV = options[:env] if options[:env]
 
-sdates = Situation.gvdates
+sdates = [Situation.gvdates, Ruler.gvdates].flatten.uniq.sort.compact
 dates = case
 when options[:date]
   exit unless Situation.gvdates.include?(options[:date])
