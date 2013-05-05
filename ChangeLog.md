@@ -3,6 +3,12 @@ Gagnrath - ROGv : Forts Watching System
 
 ChangeLog
 ---------------
+### ver0.2b
+- 修正：Rails4のバージョンをβ1からRC1に変更
+- 修正：gemを更新
+- 修正：Railsのメソッドと競合したメソッド名を変更
+- 修正：結果の手動入力時、Situationも登録するように修正
+
 ### ver0.1b（ROGv:ver5.1からの変更点）
 
 - アーキテクチャ関連

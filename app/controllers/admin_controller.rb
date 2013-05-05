@@ -108,7 +108,7 @@ class AdminController < ApplicationController
         return
       end
 
-      forts = (Situation.latest || Situation.new).forts_map
+      forts = (Situation.where('gvdate < ?', date).last || Situation.new).forts_map
       manuals = Ruler.manuals.for_date(date).inject({}){|h, m| h[m.fort_code] = m; h}
 
       updates = []
@@ -140,6 +140,28 @@ class AdminController < ApplicationController
       Ruler.transaction do
         updates.each(&:save!)
         GuildResult.add_result_for_date(date)
+
+        # Situationを登録
+        sd = Date.new(date[0..3].to_i, date[4..5].to_i, date[6..7].to_i)
+        st = ((sd + 1).to_time - 1).to_datetime # 23:59:59
+        rev = TimeUtil.time_to_revision(st)
+        s = Situation.find_by_revision(rev) || Situation.new
+        s.set_time(st)
+        fmap = s.forts_map
+        updates.each do |r|
+          f = fmap[r.fort_code] || Fort.new
+          f.revision = s.revision
+          f.gvdate = s.gvdate
+          f.fort_group = r.fort_group
+          f.fort_code = r.fort_code
+          f.fort_name = r.fort_name
+          f.formal_name = r.formal_name
+          f.guild_name = r.guild_name
+          f.update_time = s.update_time
+          s.forts << f
+        end
+        s.save!
+
         CacheData.clear_all
         rsl = true
       end
