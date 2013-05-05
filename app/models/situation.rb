@@ -108,13 +108,13 @@ class Situation < ActiveRecord::Base
     self
   end
 
-  def changed?
+  def fort_changed?
     return false if self.forts.empty?
     self.callers.empty? ? false : true
   end
 
-  def stay?
-    self.changed? ? false : true
+  def fort_stay?
+    self.fort_changed? ? false : true
   end
 
   def before(diff = 1)
@@ -144,7 +144,7 @@ class Situation < ActiveRecord::Base
       next unless af
 
       # 最終更新時間
-      if bf && bf.stay?(af)
+      if bf && bf.fort_stay?(af)
         af.update_time = bf.update_time
         next
       end
@@ -187,7 +187,7 @@ class Situation < ActiveRecord::Base
     return unless a
     self.class.transaction do
       self.connect(a)
-      return unless a.changed?
+      return unless a.fort_changed?
       a.save!
       a
     end

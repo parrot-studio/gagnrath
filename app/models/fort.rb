@@ -49,15 +49,15 @@ class Fort < ActiveRecord::Base
 
   end
 
-  def changed?(f)
+  def fort_changed?(f)
     return false unless f
     return false if self.update_time > f.update_time
     return false if self.guild_name == f.guild_name
     true
   end
 
-  def stay?(f)
-    self.changed?(f) ? false : true
+  def fort_stay?(f)
+    self.fort_changed?(f) ? false : true
   end
 
   def uptime_from(t)
