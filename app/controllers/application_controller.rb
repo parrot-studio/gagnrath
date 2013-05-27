@@ -99,7 +99,12 @@ class ApplicationController < ActionController::Base
   end
 
   def reset_union_history
-    cookies[:union_history] = nil
+    cookie_params = {
+      value: '',
+      expires: Time.at(0)
+    }
+    cookie_params[:path] = ServerSettings.app_path unless ServerSettings.app_path.blank?
+    cookies[:union_history] = cookie_params
   end
 
   def union_history(raw: false)
