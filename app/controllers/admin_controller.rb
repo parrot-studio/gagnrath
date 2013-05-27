@@ -140,9 +140,8 @@ class AdminController < ApplicationController
       GuildResult.add_result_for_date(@date)
 
       # Situationを登録
-      sd = Date.new(@date[0..3].to_i, @date[4..5].to_i, @date[6..7].to_i)
-      st = ((sd + 1).to_time - 1).to_datetime # 23:59:59
-      rev = TimeUtil.time_to_revision(st)
+      st = manual_time_for(@date)
+      rev = manual_revision_for(@date)
       s = Situation.find_by_revision(rev) || Situation.new
       s.set_time(st)
       fmap = s.forts_map
@@ -177,6 +176,8 @@ class AdminController < ApplicationController
     Ruler.transaction do
       Ruler.manuals.for_date(@date).each(&:destroy)
       GuildResult.add_result_for_date(@date)
+      s = Situation.find_by_revision(manual_revision_for(@date))
+      s.destroy if s
       CacheData.clear_all
     end
 
@@ -242,6 +243,18 @@ class AdminController < ApplicationController
       flash[:error] = '日付指定が異常です'
       redirect_to admin_rulers_path
     end
+  end
+
+  def manual_time_for(date)
+    return unless date
+    sd = Date.new(date[0..3].to_i, date[4..5].to_i, date[6..7].to_i)
+    ((sd + 1).to_time - 1).to_datetime # 23:59:59
+  end
+
+  def manual_revision_for(date)
+    st = manual_time_for(date)
+    return unless st
+    TimeUtil.time_to_revision(st)
   end
 
 end
