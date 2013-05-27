@@ -3,12 +3,15 @@ class ResultController < ApplicationController
   include FortUtil
   include TimeUtil
 
+  before_action :recently_result_action, only: [:recently_rank, :recently_guild, :recently_union]
+  before_action :span_result_action, only: [:span_rank, :span_guild, :span_union]
+
   def index
   end
 
   def rulers
     @fort = params[:fort]
-    (redirect_to result_path; return) unless fort_groups?(@fort)
+    (render_404; return) unless fort_groups?(@fort)
     @rulers = Ruler.for_group(@fort)
   end
 
@@ -31,13 +34,13 @@ class ResultController < ApplicationController
 
   def forts
     @date = params[:date]
-    (redirect_to fort_dates_path; return) unless CacheData.result_dates.include?(@date)
+    (render_404; return) unless CacheData.result_dates.include?(@date)
     @rulers = Ruler.for_date(@date)
   end
 
   def callers
     @date = params[:date]
-    (redirect_to fort_dates_path; return) unless CacheData.result_dates.include?(@date)
+    (render_404; return) unless CacheData.result_dates.include?(@date)
     @callers = GuildResult.for_date(@date)
   end
 
@@ -70,7 +73,7 @@ class ResultController < ApplicationController
 
   def total_guild
     @gname = decode_for_url(params[:name])
-    (redirect_to result_total_path; return) unless CacheData.guild_names_for_all.include?(@gname)
+    (render_404; return) unless CacheData.guild_names_for_all.include?(@gname)
     @results = GuildResult.for_guild(@gname)
     @total = GuildResult.combine(@results)
     add_union_history(@gname) unless ServerSettings.only_union_history?
@@ -80,8 +83,7 @@ class ResultController < ApplicationController
     @names = parse_union_code(params[:code], CacheData.guild_names_for_all)
     case
     when @names.empty?
-      redirect_to result_total_path
-      return
+      render_404; return
     when @names.size == 1
       redirect_to result_total_guild_path(name: encode_for_url(@names.first))
       return
@@ -120,37 +122,30 @@ class ResultController < ApplicationController
   end
 
   def recently_rank
-    recently_result_action do |dates|
-      @callers = GuildResult.totalize(dates: dates)
-    end
+    @callers = GuildResult.totalize(dates: @dates)
   end
 
   def recently_guild
-    recently_result_action do |dates|
-      @gname = decode_for_url(params[:name])
-      (redirect_to result_recently_path; return) unless CacheData.guild_names_for_all.include?(@gname)
-      @results = GuildResult.for_guild(@gname).for_date(dates)
-      @total = GuildResult.combine(@results)
-      add_union_history(@gname) unless ServerSettings.only_union_history?
-    end
+    @gname = decode_for_url(params[:name])
+    (render_404; return) unless CacheData.guild_names_for_all.include?(@gname)
+    @results = GuildResult.for_guild(@gname).for_date(@dates)
+    @total = GuildResult.combine(@results)
+    add_union_history(@gname) unless ServerSettings.only_union_history?
   end
 
   def recently_union
-    recently_result_action do |dates|
-      @names = parse_union_code(params[:code], CacheData.guild_names_for_all)
-      case
-      when @names.empty?
-        redirect_to result_recently_path
-        return
-      when @names.size == 1
-        redirect_to result_recently_guild_path(num: dates.size, name: encode_for_url(@names.first))
-        return
-      end
-
-      @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: dates)}
-      @total = GuildResult.combine(@results)
-      add_union_history(@names)
+    @names = parse_union_code(params[:code], CacheData.guild_names_for_all)
+    case
+    when @names.empty?
+      render_404; return
+    when @names.size == 1
+      redirect_to result_recently_guild_path(num: @dates.size, name: encode_for_url(@names.first))
+      return
     end
+
+    @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: @dates)}
+    @total = GuildResult.combine(@results)
+    add_union_history(@names)
   end
 
   def span_select
@@ -182,37 +177,30 @@ class ResultController < ApplicationController
   end
 
   def span_rank
-    span_result_action do |dates|
-      @callers = GuildResult.totalize(dates: dates)
-    end
+    @callers = GuildResult.totalize(dates: @dates)
   end
 
   def span_guild
-    span_result_action do |dates|
-      @gname = decode_for_url(params[:name])
-      (redirect_to result_span_path; return) unless CacheData.guild_names_for_all.include?(@gname)
-      @results = GuildResult.for_guild(@gname).for_date(dates)
-      @total = GuildResult.combine(@results)
-      add_union_history(@gname) unless ServerSettings.only_union_history?
-    end
+    @gname = decode_for_url(params[:name])
+    (render_404; return) unless CacheData.guild_names_for_all.include?(@gname)
+    @results = GuildResult.for_guild(@gname).for_date(@dates)
+    @total = GuildResult.combine(@results)
+    add_union_history(@gname) unless ServerSettings.only_union_history?
   end
 
   def span_union
-    span_result_action do |dates|
-      @names = parse_union_code(params[:code], CacheData.guild_names_for_all)
-      case
-      when @names.empty?
-        redirect_to result_span_path
-        return
-      when @names.size == 1
-        redirect_to result_span_guild_path(from: dates.first, to: dates.last, name: encode_for_url(@names.first))
-        return
-      end
-
-      @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: dates)}
-      @total = GuildResult.combine(@results)
-      add_union_history(@names)
+    @names = parse_union_code(params[:code], CacheData.guild_names_for_all)
+    case
+    when @names.empty?
+      render_404; return
+    when @names.size == 1
+      redirect_to result_span_guild_path(from: @dates.first, to: @dates.last, name: encode_for_url(@names.first))
+      return
     end
+
+    @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: @dates)}
+    @total = GuildResult.combine(@results)
+    add_union_history(@names)
   end
 
   private
@@ -230,19 +218,17 @@ class ResultController < ApplicationController
 
   def recently_result_action
     num = params[:num].to_i
-    (redirect_to result_recently_path; return) unless valid_result_size?(num)
+    redirect_to result_recently_path unless valid_result_size?(num)
     @dates = CacheData.result_dates.take(num).sort
-    (redirect_to result_recently_path; return) if @dates.empty?
-    yield(@dates)
+    redirect_to result_recently_path if @dates.empty?
   end
 
   def span_result_action
     from = params[:from]
     to = params[:to]
-    (redirect_to result_span_path; return) unless exist_result_gvdates_pair?(from, to)
+    (render_404; return) unless exist_result_gvdates_pair?(from, to)
     @dates = CacheData.result_dates.select{|d| d >= from}.select{|d| d <= to}.sort
-    (redirect_to result_span_path; return) unless valid_result_size?(@dates.size)
-    yield(@dates)
+    redirect_to result_span_path unless valid_result_size?(@dates.size)
   end
 
 end

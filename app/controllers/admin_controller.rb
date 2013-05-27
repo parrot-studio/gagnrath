@@ -4,6 +4,7 @@ class AdminController < ApplicationController
   include TimeUtil
 
   before_action :check_login, except: [:login, :add_session]
+  before_action :rulers_action, only: [:rulers_show, :rulers_update, :rulers_delete]
 
   def index
   end
@@ -94,99 +95,93 @@ class AdminController < ApplicationController
   end
 
   def rulers_show
-    rulers_action do |date|
-      @rulers = Ruler.for_date(date).reject(&:manual?)
-      @manuals = @rulers.empty? ? Ruler.manuals.for_date(date) : []
-    end
+    @rulers = Ruler.for_date(@date).reject(&:manual?)
+    @manuals = @rulers.empty? ? Ruler.manuals.for_date(@date) : []
   end
 
   def rulers_update
-    rulers_action do |date|
-      unless Ruler.for_date(date).reject(&:manual?).empty?
-        flash[:error] = '自動集計済みの結果なので、手動更新できません'
-        redirect_to admin_rulers_data_path(date)
-        return
-      end
-
-      forts = (Situation.where('gvdate < ?', date).last || Situation.new).forts_map
-      manuals = Ruler.manuals.for_date(date).inject({}){|h, m| h[m.fort_code] = m; h}
-
-      updates = []
-      params[:gname].each do |fcd, gname|
-        next unless valid_fort_code?(fcd)
-        next if gname.blank?
-        r = manuals[fcd] || Ruler.new
-        f = forts[fcd]
-
-        r.gvdate = date
-        r.fort_group = fcd[0]
-        r.fort_code = fcd
-        r.fort_name = (f ? f.fort_name : '')
-        r.formal_name = (f ? f.formal_name : '')
-        r.guild_name = gname
-        r.source = Ruler::SOURCE_MANUAL
-        r.full_defense = false
-
-        updates << r
-      end
-
-      if updates.empty?
-        flash[:error] = '結果が入力されていません'
-        redirect_to admin_rulers_data_path(date)
-        return
-      end
-
-      rsl = false
-      Ruler.transaction do
-        updates.each(&:save!)
-        GuildResult.add_result_for_date(date)
-
-        # Situationを登録
-        sd = Date.new(date[0..3].to_i, date[4..5].to_i, date[6..7].to_i)
-        st = ((sd + 1).to_time - 1).to_datetime # 23:59:59
-        rev = TimeUtil.time_to_revision(st)
-        s = Situation.find_by_revision(rev) || Situation.new
-        s.set_time(st)
-        fmap = s.forts_map
-        updates.each do |r|
-          f = fmap[r.fort_code] || Fort.new
-          f.revision = s.revision
-          f.gvdate = s.gvdate
-          f.fort_group = r.fort_group
-          f.fort_code = r.fort_code
-          f.fort_name = r.fort_name
-          f.formal_name = r.formal_name
-          f.guild_name = r.guild_name
-          f.update_time = s.update_time
-          s.forts << f
-        end
-        s.save!
-
-        CacheData.clear_all
-        rsl = true
-      end
-
-      if rsl
-        flash[:info] = "#{divided_date(date)}の結果を更新しました"
-      else
-        flash[:error] = "#{divided_date(date)}の結果を更新できませんでした"
-      end
-
-      redirect_to admin_rulers_path
+    unless Ruler.for_date(@date).reject(&:manual?).empty?
+      flash[:error] = '自動集計済みの結果なので、手動更新できません'
+      redirect_to admin_rulers_data_path(@date)
+      return
     end
+
+    forts = (Situation.where('gvdate < ?', @date).last || Situation.new).forts_map
+    manuals = Ruler.manuals.for_date(@date).inject({}){|h, m| h[m.fort_code] = m; h}
+
+    updates = []
+    params[:gname].each do |fcd, gname|
+      next unless valid_fort_code?(fcd)
+      next if gname.blank?
+      r = manuals[fcd] || Ruler.new
+      f = forts[fcd]
+
+      r.gvdate = @date
+      r.fort_group = fcd[0]
+      r.fort_code = fcd
+      r.fort_name = (f ? f.fort_name : '')
+      r.formal_name = (f ? f.formal_name : '')
+      r.guild_name = gname
+      r.source = Ruler::SOURCE_MANUAL
+      r.full_defense = false
+
+      updates << r
+    end
+
+    if updates.empty?
+      flash[:error] = '結果が入力されていません'
+      redirect_to admin_rulers_data_path(@date)
+      return
+    end
+
+    rsl = false
+    Ruler.transaction do
+      updates.each(&:save!)
+      GuildResult.add_result_for_date(@date)
+
+      # Situationを登録
+      sd = Date.new(@date[0..3].to_i, @date[4..5].to_i, @date[6..7].to_i)
+      st = ((sd + 1).to_time - 1).to_datetime # 23:59:59
+      rev = TimeUtil.time_to_revision(st)
+      s = Situation.find_by_revision(rev) || Situation.new
+      s.set_time(st)
+      fmap = s.forts_map
+      updates.each do |r|
+        f = fmap[r.fort_code] || Fort.new
+        f.revision = s.revision
+        f.gvdate = s.gvdate
+        f.fort_group = r.fort_group
+        f.fort_code = r.fort_code
+        f.fort_name = r.fort_name
+        f.formal_name = r.formal_name
+        f.guild_name = r.guild_name
+        f.update_time = s.update_time
+        s.forts << f
+      end
+      s.save!
+
+      CacheData.clear_all
+      rsl = true
+    end
+
+    if rsl
+      flash[:info] = "#{divided_date(@date)}の結果を更新しました"
+    else
+      flash[:error] = "#{divided_date(@date)}の結果を更新できませんでした"
+    end
+
+    redirect_to admin_rulers_path
   end
 
   def rulers_delete
-    rulers_action do |date|
-      Ruler.transaction do
-        Ruler.manuals.for_date(date).each(&:destroy)
-        GuildResult.add_result_for_date(date)
-        CacheData.clear_all
-      end
-
-      flash[:info] = "#{divided_date(date)}の結果を削除しました"
-      redirect_to admin_rulers_path
+    Ruler.transaction do
+      Ruler.manuals.for_date(@date).each(&:destroy)
+      GuildResult.add_result_for_date(@date)
+      CacheData.clear_all
     end
+
+    flash[:info] = "#{divided_date(@date)}の結果を削除しました"
+    redirect_to admin_rulers_path
   end
 
   private
@@ -246,9 +241,7 @@ class AdminController < ApplicationController
     unless valid_gvdate?(@date)
       flash[:error] = '日付指定が異常です'
       redirect_to admin_rulers_path
-      return
     end
-    yield(@date)
   end
 
 end

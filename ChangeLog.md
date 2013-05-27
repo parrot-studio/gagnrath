@@ -3,6 +3,12 @@ Gagnrath - ROGv : Forts Watching System
 
 ChangeLog
 ---------------
+### ver0.3b
+- 修正：view_modeが適用されないバグを修正
+- 修正：存在しないリソースに対し、基本的に404を返すように修正
+- 修正：割り込み更新APIを追加（実装漏れ）
+- 修正：Railsの作法に合わせたリファクタリング
+
 ### ver0.2b
 - 修正：Rails4のバージョンをβ1からRC1に変更
 - 修正：gemを更新

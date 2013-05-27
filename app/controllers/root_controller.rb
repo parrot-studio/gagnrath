@@ -3,6 +3,8 @@ class RootController < ApplicationController
   protect_from_forgery with: :null_session
   helper_method :reload_cycle
 
+  before_action :protect_action, except: [:index, :menu, :delete_union_history, :not_found]
+
   def index
     if params[:re]
       @reload = params[:re]
@@ -28,41 +30,42 @@ class RootController < ApplicationController
   end
 
   def update
-    protect_action do
-      Updater.update(params['d'])
-      render text: 'OK'
-    end
+    Updater.update(params['d'])
+    render text: 'OK'
   end
 
   def check_status
-    protect_action do
-      render text: 'OK'
-    end
+    render text: 'OK'
   end
 
   def latest
-    protect_action do
-      s = Situation.latest || Situation.new
+    s = Situation.latest || Situation.new
 
-      ret = {}
-      ret['id'] = s.id
-      ret['gv_date'] = s.gvdate
-      ret['revision'] = s.revision
-      ret['update_time'] = s.update_time
+    ret = {}
+    ret['id'] = s.id
+    ret['gv_date'] = s.gvdate
+    ret['revision'] = s.revision
+    ret['update_time'] = s.update_time
 
-      ret['forts'] = s.forts.map do |f|
-        fd = {}
-        fd['id'] = f.id
-        fd['fort_id'] = f.fort_code
-        fd['fort_name'] = f.fort_name
-        fd['formal_name'] = f.formal_name
-        fd['guild_name'] = f.guild_name
-        fd['update_time'] = f.update_time
-        fd
-      end
-
-      render json: ret.to_json
+    ret['forts'] = s.forts.map do |f|
+      fd = {}
+      fd['id'] = f.id
+      fd['fort_id'] = f.fort_code
+      fd['fort_name'] = f.fort_name
+      fd['formal_name'] = f.formal_name
+      fd['guild_name'] = f.guild_name
+      fd['update_time'] = f.update_time
+      fd
     end
+
+    render json: ret.to_json
+  end
+
+  def cutin
+    data = JSON.parse(params['d'])
+    s = Situation.build_from(data)
+    s.cut_in! if s
+    render text: 'OK'
   end
 
   private
@@ -70,11 +73,10 @@ class RootController < ApplicationController
   def protect_action
     (head 403; return) unless updatable_mode?
     (head 403; return) unless params['k'] == ServerSettings.auth.update_key
-    yield if block_given?
   end
 
   def reload_cycle
-    ['30', '60', '120']
+    %w(30 60 120)
   end
 
 end

@@ -35,13 +35,13 @@ class TimelineController < ApplicationController
   end
 
   def destroy
+    (render_404; return) unless updatable_mode?
     rev = params[:rev]
     s = Situation.find_by(revision: rev)
     (render_404; return) unless s
-    rpath = timeline_situation_path(date: @gvdate, rev: rev)
-    (redirect_to rpath; return) unless updatable_mode?
-    (redirect_to rpath; return) unless valid_delete_key?(params[:dkey])
+    (redirect_to timeline_situation_path(date: @gvdate, rev: rev); return) unless valid_delete_key?(params[:dkey])
     s.leave!
+    CacheData.clear_all
     redirect_to timeline_revs_path(date: @gvdate)
   end
 
@@ -76,7 +76,7 @@ class TimelineController < ApplicationController
     gs = parse_guild_params(params[:guild], CacheData.guild_names_for_date(@gvdate))
     case
     when gs.empty?
-      redirect_to timeline_union_select_path(date: @gvdate)
+      redirect_to timeline_union_path(date: @gvdate)
     when gs.size == 1
       redirect_to timeline_for_guild_path(date: @gvdate, name: encode_for_url(gs.first))
     else
@@ -88,8 +88,7 @@ class TimelineController < ApplicationController
     gs =  parse_union_code(params[:code], CacheData.guild_names_for_date(@gvdate))
     case
     when gs.empty?
-      redirect_to timeline_union_select_path(date: @gvdate)
-      return
+      render_404; return
     when gs.size == 1
       redirect_to timeline_for_guild_path(date: @gvdate, name: encode_for_url(gs.first))
       return
@@ -108,7 +107,7 @@ class TimelineController < ApplicationController
 
   def span_union_redirect
     from, to = [params['span-from-guild'], params['span-to-guild']].sort
-    (redirect_to timeline_span_union_select_path; return) unless exist_timeline_gvdates_pair?(from, to)
+    (render_404; return) unless exist_timeline_gvdates_pair?(from, to)
     gs = parse_guild_params(params[:guild], CacheData.guild_names_for_all)
     case
     when gs.empty?
@@ -122,11 +121,11 @@ class TimelineController < ApplicationController
 
   def span_guild
     gname = decode_for_url(params[:name])
-    (redirect_to timeline_span_union_select_path; return) unless CacheData.guild_names_for_all.include?(gname)
+    (render_404; return) unless CacheData.guild_names_for_all.include?(gname)
 
     from = params[:from]
     to = params[:to]
-    (redirect_to timeline_span_union_select_path; return) unless exist_timeline_gvdates_pair?(from, to)
+    (render_404; return) unless exist_timeline_gvdates_pair?(from, to)
 
     @dates = CacheData.timeline_dates.select{|d| d >= from}.select{|d| d <= to}.sort
     case
@@ -149,8 +148,7 @@ class TimelineController < ApplicationController
     @names = parse_union_code(params[:code], CacheData.guild_names_for_all)
     case
     when @names.empty?
-      redirect_to timeline_span_union_select_path
-      return
+      render_404; return
     when @names.size == 1
       redirect_to timeline_span_guild_path(
         from: params[:from], to: params[:to], name: encode_for_url(@names.first))
@@ -159,7 +157,7 @@ class TimelineController < ApplicationController
 
     from = params[:from]
     to = params[:to]
-    (redirect_to timeline_span_union_select_path; return) unless exist_timeline_gvdates_pair?(from, to)
+    (render_404; return) unless exist_timeline_gvdates_pair?(from, to)
 
     @dates = CacheData.timeline_dates.select{|d| d >= from}.select{|d| d <= to}.sort
     case
