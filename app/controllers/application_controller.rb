@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   end
 
   def view_mode?
-    ServerSettings.sample_mode? ? true : false
+    ServerSettings.view_mode? ? true : false
   end
 
   def updatable_mode?
