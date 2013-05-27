@@ -35,11 +35,11 @@ class ApplicationController < ActionController::Base
   end
 
   def encode_for_url(s)
-    URI.encode_www_form_component(s).gsub('+', '%20')
+    URI.encode_www_form_component(s.gsub('.', '%2e')).gsub('+', '%20')
   end
 
   def decode_for_url(s)
-    URI.decode_www_form_component(s.gsub('%20', '+'))
+    URI.decode_www_form_component(s.gsub('%20', '+')).gsub('%2e', '.')
   end
 
   def encode_base64_for_url(s)
