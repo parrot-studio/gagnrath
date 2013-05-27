@@ -12,7 +12,7 @@ clear_guild_form = ->
   @
 
 init_union_handler = ->
-  $("a.histroy").click (e) ->
+  $("a.history").click (e) ->
     fetch_guild_form(e)
     false
   $("a#guild-clear").click (e) ->

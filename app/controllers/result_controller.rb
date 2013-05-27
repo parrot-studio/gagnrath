@@ -73,7 +73,7 @@ class ResultController < ApplicationController
     (redirect_to result_total_path; return) unless CacheData.guild_names_for_all.include?(@gname)
     @results = GuildResult.for_guild(@gname)
     @total = GuildResult.combine(@results)
-    add_union_histroy(@gname) unless ServerSettings.only_union_histroy?
+    add_union_history(@gname) unless ServerSettings.only_union_history?
   end
 
   def total_union
@@ -89,7 +89,7 @@ class ResultController < ApplicationController
 
     @results = @names.map{|g| GuildResult.totalize_for_guild(g)}
     @total = GuildResult.combine(@results)
-    add_union_histroy(@names)
+    add_union_history(@names)
   end
 
   def recently_select
@@ -131,7 +131,7 @@ class ResultController < ApplicationController
       (redirect_to result_recently_path; return) unless CacheData.guild_names_for_all.include?(@gname)
       @results = GuildResult.for_guild(@gname).for_date(dates)
       @total = GuildResult.combine(@results)
-      add_union_histroy(@gname) unless ServerSettings.only_union_histroy?
+      add_union_history(@gname) unless ServerSettings.only_union_history?
     end
   end
 
@@ -149,7 +149,7 @@ class ResultController < ApplicationController
 
       @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: dates)}
       @total = GuildResult.combine(@results)
-      add_union_histroy(@names)
+      add_union_history(@names)
     end
   end
 
@@ -193,7 +193,7 @@ class ResultController < ApplicationController
       (redirect_to result_span_path; return) unless CacheData.guild_names_for_all.include?(@gname)
       @results = GuildResult.for_guild(@gname).for_date(dates)
       @total = GuildResult.combine(@results)
-      add_union_histroy(@gname) unless ServerSettings.only_union_histroy?
+      add_union_history(@gname) unless ServerSettings.only_union_history?
     end
   end
 
@@ -211,7 +211,7 @@ class ResultController < ApplicationController
 
       @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: dates)}
       @total = GuildResult.combine(@results)
-      add_union_histroy(@names)
+      add_union_history(@names)
     end
   end
 

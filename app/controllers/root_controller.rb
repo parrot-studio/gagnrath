@@ -14,8 +14,8 @@ class RootController < ApplicationController
   def menu
   end
 
-  def delete_union_histroy
-    reset_union_histroy
+  def delete_union_history
+    reset_union_history
     begin
       redirect_to :back
     rescue
@@ -24,7 +24,7 @@ class RootController < ApplicationController
   end
 
   def not_found
-    render status: 404
+    render_404
   end
 
   def update

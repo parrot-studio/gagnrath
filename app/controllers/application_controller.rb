@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def render_404
+    render 'root/not_found', status: 404
+  end
+
   def sample_mode?
     ServerSettings.sample_mode? ? true : false
   end
@@ -31,11 +35,11 @@ class ApplicationController < ActionController::Base
   end
 
   def encode_for_url(s)
-    URI.encode_www_form_component(s).gsub("+", "%20")
+    URI.encode_www_form_component(s).gsub('+', '%20')
   end
 
   def decode_for_url(s)
-    URI.decode_www_form_component(s.gsub("%20", "+"))
+    URI.decode_www_form_component(s.gsub('%20', '+'))
   end
 
   def encode_base64_for_url(s)
@@ -72,19 +76,19 @@ class ApplicationController < ActionController::Base
     render template: 'root/error', status: 500
   end
   
-  def add_union_histroy(guilds)
+  def add_union_history(guilds)
     gs = [guilds].flatten.uniq.compact
     return if gs.empty?
     orgs = union_history(raw: true)
     str = gs.join("\t")
     orgs.delete(str)
     orgs << str
-    size = ServerSettings.union_histroy_size
+    size = ServerSettings.union_history_size
     list = orgs.size > size ? orgs.reverse.take(size).reverse : orgs
-    set_union_histroy(list)
+    set_union_history(list)
   end
 
-  def set_union_histroy(list)
+  def set_union_history(list)
     val = (list || []).to_json
     cookie_params = {
       value: val,
@@ -94,7 +98,7 @@ class ApplicationController < ActionController::Base
     cookies[:union_history] = cookie_params
   end
 
-  def reset_union_histroy
+  def reset_union_history
     cookies[:union_history] = nil
   end
 

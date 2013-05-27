@@ -14,7 +14,7 @@ production:
     timeline:
       span_max_size: 4
     use_mail: false
-    union_histroy:
+    union_history:
       max_size: 20
       only_union: false
   memcache:
@@ -46,7 +46,7 @@ development:
     timeline:
       span_max_size: 4
     use_mail: false
-    union_histroy:
+    union_history:
       max_size: 20
       only_union: false
   memcache:
@@ -78,7 +78,7 @@ test:
     timeline:
       span_max_size: 4
     use_mail: false
-    union_histroy:
+    union_history:
       max_size: 20
       only_union: false
   memcache:

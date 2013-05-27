@@ -75,8 +75,8 @@ config/settings.yml
  - data\_size/min\_size data\_size/max\_size : 集計表示の最小/最大データ数。負荷を考えて指定
  - timeline/span\_max\_size : 期間タイムラインにおいて指定可能な最大データ数。負荷を考えて指定
  - use\_mail : メール送信を使用するかの設定。mail.ymlの設定が必須
- - union\_histroy/max\_size : ギルド/勢力履歴の最大サイズ。大きくしすぎるとcookieに収まらない（4KB制限）
- - union\_histroy/only\_union : ギルド/勢力履歴で複数ギルドのみを格納するか。falseだと単体ギルドも履歴に含む
+ - union\_history/max\_size : ギルド/勢力履歴の最大サイズ。大きくしすぎるとcookieに収まらない（4KB制限）
+ - union\_history/only\_union : ギルド/勢力履歴で複数ギルドのみを格納するか。falseだと単体ギルドも履歴に含む
 - memcache : memcachedへの接続情報
  - server : memcachedのサーバ（例：localhost:11211）
  - header : memcached上の名前空間。同じものを指定するとキャッシュが混在する

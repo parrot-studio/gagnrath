@@ -96,13 +96,13 @@ class ServerSettings < Settingslogic
       self.env.use_mail ? true : false
     end
 
-    def union_histroy_size
-      size = self.env.union_histroy.max_size
+    def union_history_size
+      size = self.env.union_history.max_size
       size.to_i > 0 ? size : 10
     end
 
-    def only_union_histroy?
-      self.env.union_histroy.only_union ? true : false
+    def only_union_history?
+      self.env.union_history.only_union ? true : false
     end
 
   end

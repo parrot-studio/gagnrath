@@ -3,6 +3,8 @@ class TimelineController < ApplicationController
   include FortUtil
   include TimeUtil
 
+  before_filter :date_action, except: [:index, :span_union_select, :span_union_redirect, :span_guild, :span_union]
+
   def index
     list = CacheData.timeline_dates
     default_size = ServerSettings.data_size_recently
@@ -24,95 +26,79 @@ class TimelineController < ApplicationController
   end
 
   def revs
-    date_action do |date|
-      @revs = CacheData.revisions_for_date(date)
-    end
+    @revs = CacheData.revisions_for_date(@gvdate)
   end
 
   def situation
-    date_action do |date|
-      @situation = Situation.find_by(revision: params[:rev])
-      redirect_to timeline_revs_path(date: date) unless @situation
-    end
+    @situation = Situation.find_by(revision: params[:rev])
+    (render_404; return) unless @situation
   end
 
   def destroy
-    date_action do |date|
-      rev = params[:rev]
-      rpath = timeline_situation_path(date: date, rev: rev)
-      redirect_to rpath unless updatable_mode?
-      redirect_to rpath unless valid_delete_key?(params[:dkey])
-      s = Situation.find_by(revision: rev)
-      s.leave! if s
-      redirect_to timeline_revs_path(date: date)
-    end
+    rev = params[:rev]
+    s = Situation.find_by(revision: rev)
+    (render_404; return) unless s
+    rpath = timeline_situation_path(date: @gvdate, rev: rev)
+    (redirect_to rpath; return) unless updatable_mode?
+    (redirect_to rpath; return) unless valid_delete_key?(params[:dkey])
+    s.leave!
+    redirect_to timeline_revs_path(date: @gvdate)
   end
 
   def fort
-    date_action do |date|
-      fort = params[:fort]
-      gs = case fort
-      when 'SE'
-        fort_groups_se
-      when 'TE'
-        fort_groups_te
-      else
-        fort_groups?(fort) ? fort : nil
-      end
-      (redirect_to timeline_path(date: date); return) if gs.nil? || gs.empty?
-
-      @timeline = FortTimeline.build(date, gs)
-      (redirect_to timeline_path(date: date); return) unless @timeline
+    fort = params[:fort]
+    gs = case fort
+    when 'SE'
+      fort_groups_se
+    when 'TE'
+      fort_groups_te
+    else fort_groups?(fort) ? fort : nil
     end
+    (render_404; return) if gs.nil? || gs.empty?
+    
+    @timeline = FortTimeline.build(@gvdate, gs)
+    (render_404; return) unless @timeline
   end
 
   def guild
-    date_action do |date|
-      gname = decode_for_url(params[:name])
-      (redirect_to timeline_path(date: date); return) unless CacheData.guild_names_for_date(date).include?(gname)
-      @timeline = GuildTimeline.build(date, gname)
-      (redirect_to timeline_path(date: date); return) unless @timeline
-      add_union_histroy(gname) unless ServerSettings.only_union_histroy?
-    end
+    gname = decode_for_url(params[:name])
+    (render_404; return) unless CacheData.guild_names_for_date(@gvdate).include?(gname)
+    @timeline = GuildTimeline.build(@gvdate, gname)
+    (render_404; return) unless @timeline
+    add_union_history(gname) unless ServerSettings.only_union_history?
   end
 
   def union_select
-    date_action do |date|
-      @names = CacheData.guild_names_for_date(date)
-    end
+    @names = CacheData.guild_names_for_date(@gvdate)
   end
 
   def union_redirect
-    date_action do |date|
-      gs = parse_guild_params(params[:guild], CacheData.guild_names_for_date(date))
-      case
-      when gs.empty?
-        redirect_to timeline_union_select_path(date: date)
-      when gs.size == 1
-        redirect_to timeline_for_guild_path(date: date, name: encode_for_url(gs.first))
-      else
-        redirect_to timeline_for_union_path(date: date, code: create_union_code(gs))
-      end
+    gs = parse_guild_params(params[:guild], CacheData.guild_names_for_date(@gvdate))
+    case
+    when gs.empty?
+      redirect_to timeline_union_select_path(date: @gvdate)
+    when gs.size == 1
+      redirect_to timeline_for_guild_path(date: @gvdate, name: encode_for_url(gs.first))
+    else
+      redirect_to timeline_for_union_path(date: @gvdate, code: create_union_code(gs))
     end
   end
 
   def union
-    date_action do |date|
-      gs =  parse_union_code(params[:code], CacheData.guild_names_for_date(date))
-      case
-      when gs.empty?
-        redirect_to timeline_union_select_path(date: date)
-        return
-      when gs.size == 1
-        redirect_to timeline_for_guild_path(date: date, name: encode_for_url(gs.first))
-        return
-      end
-
-      @timeline = GuildTimeline.build(date, gs)
-      redirect_to timeline_path(date: date) unless @timeline
-      add_union_histroy(gs)
-      render :guild
+    gs =  parse_union_code(params[:code], CacheData.guild_names_for_date(@gvdate))
+    case
+    when gs.empty?
+      redirect_to timeline_union_select_path(date: @gvdate)
+      return
+    when gs.size == 1
+      redirect_to timeline_for_guild_path(date: @gvdate, name: encode_for_url(gs.first))
+      return
     end
+
+    @timeline = GuildTimeline.build(@gvdate, gs)
+    (render_404; return) unless @timeline
+    add_union_history(gs)
+    render :guild
   end
 
   def span_union_select
@@ -154,7 +140,7 @@ class TimelineController < ApplicationController
 
     @timelines = @dates.inject({}){|h, d| h[d] = GuildTimeline.build(d, gname); h}
     @names = [gname]
-    add_union_histroy(gname) unless ServerSettings.only_union_histroy?
+    add_union_history(gname) unless ServerSettings.only_union_history?
 
     render :span_union
   end
@@ -186,16 +172,15 @@ class TimelineController < ApplicationController
     end
 
     @timelines = @dates.inject({}){|h, d| h[d] = GuildTimeline.build(d, @names); h}
-    add_union_histroy(@names)
+    add_union_history(@names)
   end
 
   private
 
   def date_action
     @gvdate = params[:date]
-    redirect_to timeline_path unless @gvdate
-    redirect_to timeline_path unless CacheData.timeline_dates.include?(@gvdate)
-    yield(@gvdate) if block_given?
+    render_404 unless @gvdate
+    render_404 unless CacheData.timeline_dates.include?(@gvdate)
   end
 
   def valid_delete_key?(dkey)

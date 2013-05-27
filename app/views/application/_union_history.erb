@@ -1,11 +1,11 @@
 <% unless union_history.empty? %>
   <div class="span6">
-    <legend>Selected Histroy</legend>
+    <legend>Selected History</legend>
     <ol>
       <% union_history.reverse.each do |gs| %>
-        <li><a href="#" class="histroy" data-list="<%= gs.join("\t") %>"><%= gs.join(' , ') %></a></li>
+        <li><a href="#" class="history" data-list="<%= gs.join("\t") %>"><%= gs.join(' , ') %></a></li>
       <% end %>
     </ol>
-    <%= link_to('Reset Histroy', union_histroy_path, method: :delete) %>
+    <%= link_to('Reset History', union_history_path, method: :delete) %>
   </div>
 <% end %>
