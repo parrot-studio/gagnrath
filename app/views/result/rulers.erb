@@ -59,7 +59,7 @@
                   <% else
                     linked[name] = true %>
                     <td class="span3 text-center">
-                      <%= link_to(name, result_path) %>
+                      <%= link_to(name, result_total_guild_path(name: encode_for_url(name))) %>
                     </td>
                   <% end %>
                 <% end %>
