@@ -3,6 +3,10 @@ Gagnrath - ROGv : Forts Watching System
 
 ChangeLog
 ---------------
+### ver0.4b
+- 修正：Rails4を正式リリース版に修正（暫定的置き換えにつき、しばらく様子見）
+- 修正：sendmailに対する設定が正しく動作しない問題を修正
+
 ### ver0.3b
 - 修正：view_modeが適用されないバグを修正
 - 修正：存在しないリソースに対し、基本的に404を返すように修正
