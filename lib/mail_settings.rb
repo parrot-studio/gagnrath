@@ -16,7 +16,7 @@ class MailSettings < Settingslogic
         config.action_mailer.smtp_settings = symbolize(self.smtp_settings) unless self.smtp_settings.blank?
       when :sendmail
         config.action_mailer.delivery_method = :sendmail
-        config.action_mailer.sendmail_settings = symbolize(self.smtp_settings) unless self.sendmail_settings.blank?
+        config.action_mailer.sendmail_settings = symbolize(self.sendmail_settings) unless self.sendmail_settings.blank?
       else
         config.action_mailer.delivery_method = :test
       end
