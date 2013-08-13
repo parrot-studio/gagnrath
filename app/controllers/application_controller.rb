@@ -21,6 +21,10 @@ class ApplicationController < ActionController::Base
     render 'root/not_found', status: 404
   end
 
+  def render_locked
+    render 'root/locked', status: 403
+  end
+
   def sample_mode?
     ServerSettings.sample_mode? ? true : false
   end
@@ -127,6 +131,10 @@ class ApplicationController < ActionController::Base
     rescue
       []
     end
+  end
+
+  def check_time_mode
+    (render_locked; return) if time_lock_mode?
   end
 
 end
