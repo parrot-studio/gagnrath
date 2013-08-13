@@ -3,6 +3,9 @@ Gagnrath - ROGv : Forts Watching System
 
 ChangeLog
 ---------------
+### ver1.0rc
+- 追加：サンプルモードに、Gv中のみ閲覧を制限する仕組みを追加
+
 ### ver0.4b
 - 修正：Rails4を正式リリース版に修正（暫定的置き換えにつき、しばらく様子見）
 - 修正：sendmailに対する設定が正しく動作しない問題を修正

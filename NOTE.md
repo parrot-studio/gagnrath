@@ -1,16 +1,6 @@
 READMEには書きたくないが、一応まとめないと困る何か
 ===============
 
-なぜREADMEに書かないのか
----------------
-システムの性質を考えればわかるじゃないですか・・・
-
-
-一方で、複雑化してきたシステムに私の頭が追いつかなくなってきたし、
-作者が追いつかないものを他の人が扱えるかというのも微妙なので、
-「ここ」にメモっておく方向で
-
-
 Data convert from old ROGv
 ---------------
 - cd [old rogv dir]
@@ -44,7 +34,7 @@ Data convert from old ROGv
  - 宣伝フッタ：非表示
 
 
-#### サンプルモード（sample\_mode:true）
+#### サンプルモード（sample\_mode:true / time_lock:false）
 - サンプル環境用モード
 - http://ro.parrot-studio.com/rogvs/ で公開するためのモード
 
@@ -52,7 +42,18 @@ Data convert from old ROGv
  - クライアントからの更新：不能
  - 管理系の利用：不能
  - 宣伝フッタ：表示
+ - Gv時間中の閲覧：可能
 
+#### 時間制限付きサンプルモード（sample\_mode:true / time_lock:true）
+- サンプルデータの閲覧をGv前後だけ制限するモード
+- サンプル公開用に本番データを使っているので、Gv時間に見せたくない場合等に使用
+- development環境においては時間と無関係に、configだけで判断して適用される
+
+ - Basic認証：無効
+ - クライアントからの更新：不能
+ - 管理系の利用：不能
+ - 宣伝フッタ：表示
+ - Gv時間中の閲覧：不可能（development環境では常に不可能）
 
 config/settings.yml
 ---------------
@@ -70,6 +71,7 @@ config/settings.yml
  - server\_name : RO的な意味でのサーバ名。表示にのみ使用
  - gvtype: "FE"を指定するとFE/SEモード、"TE"を指定するとTEモードで動作
  - sample\_mode view\_mode : モード説明参照
+ - time\_lock : サンプルの閲覧をGv時間中だけ遮断するかしないか。サンプルモード以外では適用されない
  - attention\_minitues : 砦viewで強調表示するためのuptime。現在交戦中の可能性が高い場所を区別
  - data\_size/recently : 集計で「最近のn週」のnに入る値
  - data\_size/min\_size data\_size/max\_size : 集計表示の最小/最大データ数。負荷を考えて指定
