@@ -134,7 +134,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_time_mode
-    (render_locked; return) if time_lock_mode?
+    (render_locked; return) if time_locked?
   end
 
 end
