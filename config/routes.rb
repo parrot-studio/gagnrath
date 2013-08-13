@@ -9,7 +9,8 @@ Gagnrath::Application.routes.draw do
   put  'update' => 'root#update'
   get  'status' => 'root#check_status'
   post 'status' => 'root#check_status'
-  get  'sr'     => 'root#menu', as: :menu
+  get  'sr'     => 'root#menu',  as: :menu
+  get  'notes'  => 'root#notes', as: :notes
   get  'latest' => 'root#latest'
   post 'latest' => 'root#latest'
   put  'cutin'  => 'root#cutin'
