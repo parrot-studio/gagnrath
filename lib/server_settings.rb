@@ -109,6 +109,11 @@ class ServerSettings < Settingslogic
       self.env.union_history.only_union ? true : false
     end
 
+    def dump_generation
+      g = self.env.dump_generation.to_i
+      g > 0 ? g : 0
+    end
+
   end
 
 end

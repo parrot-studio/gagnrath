@@ -18,6 +18,7 @@ production:
     union_history:
       max_size: 20
       only_union: false
+    dump_generation: 0
   memcache:
     server: localhost:11211
     namespace: hoge
@@ -51,6 +52,7 @@ development:
     union_history:
       max_size: 20
       only_union: false
+    dump_generation: 0
   memcache:
     server: localhost:11211
     namespace: devel
@@ -84,6 +86,7 @@ test:
     union_history:
       max_size: 20
       only_union: false
+    dump_generation: 0
   memcache:
     server: localhost:11211
     namespace: test

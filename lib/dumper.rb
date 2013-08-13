@@ -81,9 +81,27 @@ class Dumper
     m
   end
 
+  def clear_dump
+    return if ServerSettings.dump_generation <= 0
+    return self unless File.exist?(dump_path)
+
+    flist =[]
+    Dir.glob("#{dump_path}/*.tar.gz").each do |f|
+      flist << [f, File.mtime(f)]
+    end
+
+    file_list = flist.sort_by{|f| -f.last.to_i}.map(&:first)
+    ServerSettings.dump_generation.times{ file_list.shift }
+    return if file_list.empty?
+    file_list.each{|f| File.unlink(f)}
+
+    file_list
+  end
+
   def execute
     dump.archive
     send_mail if ServerSettings.use_mail?
+    clear_dump if ServerSettings.dump_generation > 0
     self
   end
 end
