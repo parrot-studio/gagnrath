@@ -3,6 +3,7 @@ class ResultController < ApplicationController
   include FortUtil
   include TimeUtil
 
+  before_action :check_time_mode
   before_action :recently_result_action, only: [:recently_rank, :recently_guild, :recently_union]
   before_action :span_result_action, only: [:span_rank, :span_guild, :span_union]
 

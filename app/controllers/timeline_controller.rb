@@ -3,6 +3,7 @@ class TimelineController < ApplicationController
   include FortUtil
   include TimeUtil
 
+  before_action :check_time_mode
   before_filter :date_action, except: [:index, :span_union_select, :span_union_redirect, :span_guild, :span_union]
 
   def index

@@ -3,6 +3,7 @@ class RootController < ApplicationController
   protect_from_forgery with: :null_session
   helper_method :reload_cycle
 
+  before_action :check_time_mode
   before_action :protect_action, except: [:index, :menu, :delete_union_history, :not_found]
 
   def index
