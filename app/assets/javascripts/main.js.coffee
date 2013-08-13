@@ -22,3 +22,4 @@ init_union_handler = ->
 
 $ ->
   init_union_handler() if $("[id^=guild]").length > 0
+  $('.guild-pop').tooltip()

@@ -49,7 +49,11 @@
                 <% when :stay %>
                   <td class="span1 text-center guild-stay"><small>↓</small></td>
                 <% when :lose %>
-                  <td class="span1 text-center guild-lose"><small>×</small></td>
+                  <td class="span1 text-center guild-lose">
+                    <span class="guild-pop" rel="tooltip" title="called : <%= state.last %>">
+                      <small>×</small>
+                    </span>
+                  </td>
                 <% else %>
                   <td class="span1 text-center"><small>-</small></td>
                 <% end %>
