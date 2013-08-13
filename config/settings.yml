@@ -6,6 +6,7 @@ production:
     gvtype: FE
     sample_mode: false
     view_mode: false
+    time_lock: false
     attention_minitues: 5
     data_size:
       recently: 6
@@ -38,6 +39,7 @@ development:
     gvtype: FE
     sample_mode: false
     view_mode: false
+    time_lock: false
     attention_minitues: 5
     data_size:
       recently: 6
@@ -70,6 +72,7 @@ test:
     gvtype: FE
     sample_mode: false
     view_mode: false
+    time_lock: false
     attention_minitues: 5
     data_size:
       recently: 6

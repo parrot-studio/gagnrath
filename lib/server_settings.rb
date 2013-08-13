@@ -26,6 +26,10 @@ class ServerSettings < Settingslogic
       self.env.view_mode ? true : false
     end
 
+    def time_lock?
+      self.env.time_lock ? true : false
+    end
+
     def basic_auth_params
       {name: self.auth.basic.user, password: self.auth.basic.pass}
     end

@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :sample_mode?, :view_mode?, :updatable_mode?, :encode_for_url,
-    :union_history, :create_union_code
+    :union_history, :create_union_code, :time_lock_mode?, :time_locked?
 
   private
 
@@ -32,6 +32,17 @@ class ApplicationController < ActionController::Base
   def updatable_mode?
     return false if sample_mode?
     view_mode? ? false : true
+  end
+
+  def time_lock_mode?
+    return false unless sample_mode?
+    ServerSettings.time_lock? ? true : false
+  end
+
+  def time_locked?
+    return false unless time_lock_mode?
+    return true if Rails.env.development?
+    TimeUtil.in_battle_time? ? true : false
   end
 
   def encode_for_url(s)
