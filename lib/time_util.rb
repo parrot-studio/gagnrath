@@ -46,8 +46,8 @@ module TimeUtil
 
   def in_battle_time?(t = nil)
     t ||= DateTime.now
-    return false if t < DateTime.new(t.year, t.mon, t.mday, 19, 50, 0)
-    return false if t  > DateTime.new(t.year, t.mon, t.mday, 22, 10, 0)
+    return false if t < Time.local(t.year, t.mon, t.mday, 19, 50, 0).to_datetime
+    return false if t > Time.local(t.year, t.mon, t.mday, 22, 10, 0).to_datetime
 
     case
     when ServerSettings.gvtype_fe?
