@@ -13,8 +13,8 @@ ROのGvGにおいて、「現状」を把握するためのシステム「ROGv�
 
 Sample Site
 ---------------
-http://ro.parrot-studio.com/rogvs/
-http://ro.parrot-studio.com/kafragarten/
+- http://ro.parrot-studio.com/rogvs/
+- http://ro.parrot-studio.com/kafragarten/
 
 Install
 ---------------
