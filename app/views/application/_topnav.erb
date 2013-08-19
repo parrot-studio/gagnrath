@@ -1,7 +1,11 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="<%= root_path %>"><strong>Gagnrath</strong> for <%= server_name %></a>
+      <% unless time_lock_mode? %>
+        <a class="brand" href="<%= root_path %>"><strong>Gagnrath</strong> for <%= server_name %></a>
+      <% else %>
+        <a class="brand" href="<%= root_path %>"><strong>Kafragarten</strong> (for <%= server_name %>)</a>
+      <% end %>
       <ul class="nav pull-right">
         <% if sample_mode? %>
           <li><%= link_to('ご利用上の注意', notes_path) %></li>
