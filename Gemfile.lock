@@ -48,7 +48,6 @@ GEM
     hike (1.2.3)
     http-cookie (1.0.1)
       domain_name (~> 0.5)
-    httpclient (2.3.4.1)
     i18n (0.6.4)
     i18n_generators (1.2.1)
       mechanize
@@ -162,10 +161,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bootstrap-sass
+  bootstrap-sass (~> 2.3.2.1)
   coffee-rails (~> 4.0.0)
   dalli
-  httpclient
   i18n_generators
   jbuilder (~> 1.2)
   jquery-rails

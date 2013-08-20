@@ -48,8 +48,7 @@ gem 'jbuilder', '~> 1.2'
 # need for app
 gem 'settingslogic'
 gem 'dalli'
-gem 'bootstrap-sass'
-gem 'httpclient'
+gem 'bootstrap-sass', '~> 2.3.2.1'
 
 # rspec
 group :development, :test do
