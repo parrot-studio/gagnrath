@@ -3,6 +3,10 @@ Gagnrath - ROGv : Forts Watching System
 
 ChangeLog
 ---------------
+### ver1.1
+- 修正：gemを更新
+- その他：Ruby2.1系で動作確認
+
 ### ver1.0
 - 修正：gemを更新
 - 修正：機能そのものには関係ない微修正
