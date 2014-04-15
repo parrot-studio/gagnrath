@@ -3,7 +3,8 @@ class TimelineController < ApplicationController
   include TimeUtil
 
   before_action :check_time_mode
-  before_filter :date_action, except: [:index, :span_union_select, :span_union_redirect, :span_guild, :span_union]
+  before_action :date_action, except: [:index, :span_union_select, :span_union_redirect, :span_guild, :span_union]
+  before_action { add_navs('Timeline') }
 
   def index
     list = CacheData.timeline_dates
@@ -23,15 +24,19 @@ class TimelineController < ApplicationController
     else
       list.take(default_size)
     end
+
+    add_navs_for_date(@dates) if @dates.size == 1
   end
 
   def revs
     @revs = CacheData.revisions_for_date(@gvdate)
+    add_navs_for_date(@gvdate)
   end
 
   def situation
     @situation = Situation.find_by(revision: params[:rev])
     (render_404; return) unless @situation
+    add_navs_for_revision(@situation.revision)
   end
 
   def destroy
@@ -58,6 +63,9 @@ class TimelineController < ApplicationController
 
     @timeline = FortTimeline.build(@gvdate, gs)
     (render_404; return) unless @timeline
+
+    add_navs_for_date(@gvdate)
+    add_navs(fort)
   end
 
   def guild
@@ -66,6 +74,9 @@ class TimelineController < ApplicationController
     @timeline = GuildTimeline.build(@gvdate, gname)
     (render_404; return) unless @timeline
     add_union_history(gname) unless ServerSettings.only_union_history?
+
+    add_navs_for_date(@gvdate)
+    add_navs_for_guild(gname)
   end
 
   def union_select
@@ -97,6 +108,10 @@ class TimelineController < ApplicationController
     @timeline = GuildTimeline.build(@gvdate, gs)
     (render_404; return) unless @timeline
     add_union_history(gs)
+
+    add_navs_for_date(@gvdate)
+    add_navs_for_guild(gs)
+
     render :guild
   end
 
@@ -141,6 +156,9 @@ class TimelineController < ApplicationController
     @names = [gname]
     add_union_history(gname) unless ServerSettings.only_union_history?
 
+    add_navs_for_date(@dates)
+    add_navs_for_guild(gname)
+
     render :span_union
   end
 
@@ -171,6 +189,9 @@ class TimelineController < ApplicationController
 
     @timelines = @dates.inject({}){|h, d| h[d] = GuildTimeline.build(d, @names); h}
     add_union_history(@names)
+
+    add_navs_for_date(@dates)
+    add_navs_for_guild(@names)
   end
 
   private

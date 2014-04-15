@@ -2,8 +2,17 @@ module ApplicationHelper
   include TimeUtil
   include FortUtil
 
-  def server_name
-    ServerSettings.env.server_name
+  def site_title
+    ServerSettings.site_title
+  end
+
+  def site_sub_title
+    ServerSettings.site_sub_title
+  end
+
+  def title_navs
+    return if @title_navs.blank?
+    [@title_navs].flatten.reject(&:blank?).reverse.inject(""){|s, n| s << "#{n} | " }
   end
 
   def data_size_recently

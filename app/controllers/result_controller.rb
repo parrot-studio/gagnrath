@@ -5,6 +5,7 @@ class ResultController < ApplicationController
   before_action :check_time_mode
   before_action :recently_result_action, only: [:recently_rank, :recently_guild, :recently_union]
   before_action :span_result_action, only: [:span_rank, :span_guild, :span_union]
+  before_action { add_navs('Result') }
 
   def index
   end
@@ -13,6 +14,9 @@ class ResultController < ApplicationController
     @fort = params[:fort]
     (render_404; return) unless fort_groups?(@fort)
     @rulers = Ruler.for_group(@fort)
+
+    add_navs("History of Rulers")
+    add_navs(@fort)
   end
 
   def dates
@@ -30,18 +34,26 @@ class ResultController < ApplicationController
     else
       list.take(default_size)
     end
+
+    add_navs_for_date(@dates) if @dates.size == 1
   end
 
   def forts
     @date = params[:date]
     (render_404; return) unless CacheData.result_dates.include?(@date)
     @rulers = Ruler.for_date(@date)
+
+    add_navs_for_date(@date)
+    add_navs("Forts")
   end
 
   def callers
     @date = params[:date]
     (render_404; return) unless CacheData.result_dates.include?(@date)
     @callers = GuildResult.for_date(@date)
+
+    add_navs_for_date(@date)
+    add_navs("Callers")
   end
 
   def total_select
@@ -69,6 +81,9 @@ class ResultController < ApplicationController
 
   def total_rank
     @callers = GuildResult.totalize
+
+    add_navs("Callers Ranking")
+    add_navs("Total")
   end
 
   def total_guild
@@ -77,6 +92,9 @@ class ResultController < ApplicationController
     @results = GuildResult.for_guild(@gname)
     @total = GuildResult.combine(@results)
     add_union_history(@gname) unless ServerSettings.only_union_history?
+
+    add_navs("Total")
+    add_navs_for_guild(@gname)
   end
 
   def total_union
@@ -92,6 +110,9 @@ class ResultController < ApplicationController
     @results = @names.map{|g| GuildResult.totalize_for_guild(g)}
     @total = GuildResult.combine(@results)
     add_union_history(@names)
+
+    add_navs("Total")
+    add_navs_for_guild(@names)
   end
 
   def recently_select
@@ -123,6 +144,9 @@ class ResultController < ApplicationController
 
   def recently_rank
     @callers = GuildResult.totalize(dates: @dates)
+
+    add_navs("Callers Ranking")
+    add_navs("Recently #{@dates.size}weeks")
   end
 
   def recently_guild
@@ -131,6 +155,9 @@ class ResultController < ApplicationController
     @results = GuildResult.for_guild(@gname).for_date(@dates)
     @total = GuildResult.combine(@results)
     add_union_history(@gname) unless ServerSettings.only_union_history?
+
+    add_navs("Recently #{@dates.size}weeks")
+    add_navs_for_guild(@gname)
   end
 
   def recently_union
@@ -146,6 +173,9 @@ class ResultController < ApplicationController
     @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: @dates)}
     @total = GuildResult.combine(@results)
     add_union_history(@names)
+
+    add_navs("Recently #{@dates.size}weeks")
+    add_navs_for_guild(@names)
   end
 
   def span_select
@@ -178,6 +208,9 @@ class ResultController < ApplicationController
 
   def span_rank
     @callers = GuildResult.totalize(dates: @dates)
+
+    add_navs("Callers Ranking")
+    add_navs_for_date(@dates)
   end
 
   def span_guild
@@ -186,6 +219,9 @@ class ResultController < ApplicationController
     @results = GuildResult.for_guild(@gname).for_date(@dates)
     @total = GuildResult.combine(@results)
     add_union_history(@gname) unless ServerSettings.only_union_history?
+
+    add_navs_for_date(@dates)
+    add_navs_for_guild(@gname)
   end
 
   def span_union
@@ -201,6 +237,9 @@ class ResultController < ApplicationController
     @results = @names.map{|g| GuildResult.totalize_for_guild(g, dates: @dates)}
     @total = GuildResult.combine(@results)
     add_union_history(@names)
+
+    add_navs_for_date(@dates)
+    add_navs_for_guild(@names)
   end
 
   private

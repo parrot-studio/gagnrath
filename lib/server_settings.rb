@@ -13,6 +13,15 @@ class ServerSettings < Settingslogic
       Rails.application.secrets
     end
 
+    def site_title
+      t = self.env.site.title
+      t.blank? ? 'Gagnrath' : t
+    end
+
+    def site_sub_title
+      self.env.site.sub_title
+    end
+
     def sample_mode?
       self.env.sample_mode ? true : false
     end

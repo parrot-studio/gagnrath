@@ -53,3 +53,4 @@ production:
   database: gagnrath
   username: rogv
   password: <%= ENV['GAGNRATH_DATABASE_PASSWORD'] %>
+  socket: /tmp/mysql.sock

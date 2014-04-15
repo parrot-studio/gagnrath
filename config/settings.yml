@@ -1,7 +1,9 @@
 production:
   env:
     app_path:
-    server_name: Gimle
+    site:
+      title: 'Gagnrath'
+      sub_title: 'for Gimle'
     gvtype: FE
     sample_mode: false
     view_mode: false
@@ -34,7 +36,9 @@ production:
 development:
   env:
     app_path:
-    server_name: Nounai
+    site:
+      title: 'Gagnrath'
+      sub_title: 'for Nounai'
     gvtype: FE
     sample_mode: false
     view_mode: false
@@ -67,7 +71,8 @@ development:
 test:
   env:
     app_path:
-    server_name: SakrayJ
+      title: 'Gagnrath'
+      sub_title: 'for SakrayJ'
     gvtype: FE
     sample_mode: false
     view_mode: false

@@ -16,6 +16,44 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def title_navs
+    @title_navs ||= []
+    @title_navs
+  end
+
+  def add_navs(nav)
+    return if nav.blank?
+    title_navs << nav
+  end
+
+  def add_navs_for_date(date)
+    ds = [date].flatten.reject(&:blank?)
+    return if ds.empty?
+
+    nav = if ds.size == 1
+      divided_date(date)
+    else
+      "#{divided_date(ds.first)}-#{divided_date(ds.last)}"
+    end
+    add_navs(nav)
+  end
+
+  def add_navs_for_revision(rev)
+    return if rev.blank?
+    add_navs(revision_to_formet_time(rev))
+  end
+
+  def add_navs_for_guild(guild)
+    gs = [guild].flatten.reject(&:blank?)
+    return if gs.empty?
+    nav = if gs.size == 1
+      guild
+    else
+      "#{gs.size}Guilds (#{gs.join(', ')})"
+    end
+    add_navs(nav)
+  end
+
   def render_404
     render 'root/not_found', status: 404
   end

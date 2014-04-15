@@ -14,9 +14,11 @@ class RootController < ApplicationController
   end
 
   def menu
+    add_navs('Strategy Room')
   end
 
   def notes
+    add_navs('ご利用上の注意')
   end
 
   def delete_union_history

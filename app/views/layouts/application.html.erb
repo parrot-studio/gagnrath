@@ -9,11 +9,7 @@
     <%= stylesheet_link_tag    "application", media: "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
-    <% unless time_lock_mode? %>
-      <title>Gagnrath for <%= server_name %></title>
-    <% else %>
-      <title>Kafragarten (for <%= server_name %>)</title>
-    <% end %>
+    <title><%= title_navs %><%= site_title%></title>
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->

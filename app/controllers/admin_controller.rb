@@ -4,6 +4,7 @@ class AdminController < ApplicationController
 
   before_action :check_login, except: [:login, :add_session]
   before_action :rulers_action, only: [:rulers_show, :rulers_update, :rulers_delete]
+  before_action { add_navs('Admin') }
 
   def index
   end
@@ -11,6 +12,7 @@ class AdminController < ApplicationController
   def login
     clear_session
     (redirect_to root_path; return) unless updatable_mode?
+    add_navs('Login')
   end
 
   def add_session
@@ -27,6 +29,7 @@ class AdminController < ApplicationController
 
   def backup
     @files = DumpFile.all
+    add_navs('データバックアップ')
   end
 
   def backup_execute
@@ -52,6 +55,7 @@ class AdminController < ApplicationController
 
   def result
     @dates = [Situation.gvdates, Ruler.gvdates].flatten.uniq.sort.compact.reverse
+    add_navs('結果集計管理')
   end
 
   def add_result
@@ -80,6 +84,8 @@ class AdminController < ApplicationController
   def rulers
     @manuals = Ruler.manuals.uniq(:gvdate).pluck(:gvdate).sort
     @dates = Ruler.gvdates
+
+    add_navs('結果手動入力')
   end
 
   def rulers_new
@@ -96,6 +102,9 @@ class AdminController < ApplicationController
   def rulers_show
     @rulers = Ruler.for_date(@date).reject(&:manual?)
     @manuals = @rulers.empty? ? Ruler.manuals.for_date(@date) : []
+
+    add_navs('結果手動入力')
+    add_navs_for_date(@date)
   end
 
   def rulers_update
