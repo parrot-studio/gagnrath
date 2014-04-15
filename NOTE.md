@@ -1,5 +1,12 @@
 READMEには書きたくないが、一応まとめないと困る何か
 ===============
+ver1.x系からver2.x系への移行について
+---------------
+設定ファイルの変更により、以下の作業が必要
+
+- settings.yml の secret_key_base の値を secrets.yml に移し替え
+- settings.yml の server_name の値を、同じファイルの site/sub_titleあたりに移し替え
+- database.yml の情報を書き直し
 
 Data convert from old ROGv
 ---------------

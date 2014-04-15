@@ -71,6 +71,7 @@ development:
 test:
   env:
     app_path:
+    site:
       title: 'Gagnrath'
       sub_title: 'for SakrayJ'
     gvtype: FE

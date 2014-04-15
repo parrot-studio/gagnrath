@@ -7,6 +7,9 @@ ChangeLog
 - 修正：Rails4.1に対応
 - 修正：config.ymlのsecret_key_baseを廃止し、secrets.ymlに移行
 - 修正：database.ymlの表記方法をRails4.1のものに修正
+- 追加：システムのタイトルを変更可能に
+- 追加：ページtitleにナビゲーション情報を追加
+- 修正：結果ページのリンク先が誤っていたところを修正
 
 ### ver1.1
 - 修正：gemを更新
