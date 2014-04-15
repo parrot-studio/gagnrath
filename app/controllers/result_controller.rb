@@ -1,4 +1,3 @@
-# coding: utf-8
 class ResultController < ApplicationController
   include FortUtil
   include TimeUtil

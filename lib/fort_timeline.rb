@@ -1,4 +1,3 @@
-# coding: utf-8
 class FortTimeline
   include FortUtil
   include TimeUtil

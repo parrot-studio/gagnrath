@@ -1,4 +1,3 @@
-# coding: utf-8
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -90,7 +89,7 @@ class ApplicationController < ActionController::Base
   def server_error
     render template: 'root/error', status: 500
   end
-  
+
   def add_union_history(guilds)
     gs = [guilds].flatten.uniq.compact
     return if gs.empty?

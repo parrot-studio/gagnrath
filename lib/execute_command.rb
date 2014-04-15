@@ -1,4 +1,3 @@
-# coding: utf-8
 class ExecuteCommand
 
   attr_reader :result
@@ -11,7 +10,7 @@ class ExecuteCommand
     end
 
   end
-  
+
   def execute(cmd)
     return if cmd.blank?
     @result = %x(#{cmd})

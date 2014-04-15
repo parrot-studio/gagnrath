@@ -62,12 +62,10 @@ config/settings.yml
 - クローズドに運用する前提でPASS等は平文で書くようになっている。他のシステムと共有しないこと
  - ブラウザツールバー等でPASSが漏れるリスクはあることも留意すべき
  - システムがhttpsで運用されるといいのだけど、趣味のシステムでそこまでは・・・
-- env/secret\_key\_baseを指定しないと起動時にエラーになるので注意
 
 #### 詳細
 - env : 環境設定
  - app\_path : サーバroot以外に設置した場合、そのpathを記述（例：/sample）
- - secret\_key\_base : Railsのセッション生成に使われる文字列。"rake secret"を実行して文字列を生成
  - server\_name : RO的な意味でのサーバ名。表示にのみ使用
  - gvtype: "FE"を指定するとFE/SEモード、"TE"を指定するとTEモードで動作
  - sample\_mode view\_mode : モード説明参照

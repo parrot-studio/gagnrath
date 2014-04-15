@@ -1,6 +1,8 @@
 // Place all the styles related to the root controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+//= depend_on_asset "glyphicons-halflings.png"
+//= depend_on_asset "glyphicons-halflings-white.png"
 @import "bootstrap";
 
 body {

@@ -1,4 +1,3 @@
-# coding: utf-8
 class MailSettings < Settingslogic
   source File.expand_path('../../config/mail.yml', __FILE__)
   namespace Rails.env

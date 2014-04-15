@@ -3,6 +3,11 @@ Gagnrath - ROGv : Forts Watching System
 
 ChangeLog
 ---------------
+### ver2.0
+- 修正：Rails4.1に対応
+- 修正：config.ymlのsecret_key_baseを廃止し、secrets.ymlに移行
+- 修正：database.ymlの表記方法をRails4.1のものに修正
+
 ### ver1.1
 - 修正：gemを更新
 - その他：Ruby2.1系で動作確認

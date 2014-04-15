@@ -1,8 +1,7 @@
-# coding: utf-8
 class PostedSituation < ActiveRecord::Base
 
   validates :posted_time, presence: true
-  validates :posted_data, presence: true 
+  validates :posted_data, presence: true
 
   class << self
     def next_target

@@ -1,4 +1,3 @@
-# coding: utf-8
 class RootController < ApplicationController
   protect_from_forgery with: :null_session
   helper_method :reload_cycle

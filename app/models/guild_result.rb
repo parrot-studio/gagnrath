@@ -1,4 +1,3 @@
-# coding: utf-8
 class GuildResult < ActiveRecord::Base
   include FortUtil
 

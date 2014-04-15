@@ -1,4 +1,3 @@
-# coding: utf-8
 class AdminMailer < ActionMailer::Base
 
   def env_test

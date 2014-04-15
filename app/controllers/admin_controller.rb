@@ -1,4 +1,3 @@
-# coding: utf-8
 class AdminController < ApplicationController
   include FortUtil
   include TimeUtil
@@ -70,7 +69,7 @@ class AdminController < ApplicationController
     end
     CacheData.clear_all
 
-    flash[:info] = if dates.empty? 
+    flash[:info] = if dates.empty?
       '集計対象はありませんでした'
     else
       "データ集計が完了しました(#{dates.map{|d| divided_date(d)}.join(',')})"

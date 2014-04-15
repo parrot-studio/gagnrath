@@ -1,9 +1,9 @@
-Gagnrath::Application.routes.draw do
+Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root to: 'welcome#index'
+  # root 'welcome#index'
   root 'root#index'
 
   put  'update' => 'root#update'
@@ -104,6 +104,13 @@ Gagnrath::Application.routes.draw do
   #       get 'recent', on: :collection
   #     end
   #   end
+
+  # Example resource route with concerns:
+  #   concern :toggleable do
+  #     post 'toggle'
+  #   end
+  #   resources :posts, concerns: :toggleable
+  #   resources :photos, concerns: :toggleable
 
   # Example resource route within a namespace:
   #   namespace :admin do

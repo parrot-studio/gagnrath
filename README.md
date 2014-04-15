@@ -6,9 +6,9 @@ Description
 ROのGvGにおいて、「現状」を把握するためのシステム「ROGv」の新バージョンです。
 見た目や機能はほぼ同じですが、一から設計し直しました。
 
-- Ruby(2.0以上で1.9系は未対応、2.1で運用中)
-- Rails4
-- MariaDB（MySQLでも可）
+- Ruby2.1(1.9系は未対応)
+- Rails4.1
+- MariaDB5以上（MySQLでも可）
 - memcached（以前と違い必須）
 
 Sample Site
@@ -24,6 +24,7 @@ Install
 - (DB setting)
 - vi config/database.yml
 - (vi config/mail.yml)
+- vi config/secrets.yml
 - bundle
 - rake db:migrate
 - rails s
@@ -53,6 +54,7 @@ https://github.com/parrot-studio/rogv_server
 
 キーワード引数等、2.0の機能を使っているので、1.9系ではエラーになります。
 高速化の恩恵も薄くなるので、1.9系に対応する予定はありません。
+そもそも、Ruby1.9.3のサポートは2015/02で打ち切られます。
 
 ### 「View Mode」とはなんですか？
 

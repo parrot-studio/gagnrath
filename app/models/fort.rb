@@ -1,4 +1,3 @@
-# coding: utf-8
 class Fort < ActiveRecord::Base
   include FortUtil
   include TimeUtil

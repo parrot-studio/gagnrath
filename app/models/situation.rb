@@ -1,4 +1,3 @@
-# coding: utf-8
 class Situation < ActiveRecord::Base
   include FortUtil
   include TimeUtil
@@ -148,8 +147,8 @@ class Situation < ActiveRecord::Base
         af.update_time = bf.update_time
         next
       end
-      af.update_time = a.update_time      
-      
+      af.update_time = a.update_time
+
       # caller生成
       cs << lambda do
         c = cmap[af.fort_code] || Caller.new

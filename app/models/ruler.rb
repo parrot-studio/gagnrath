@@ -1,4 +1,3 @@
-# coding: utf-8
 class Ruler < ActiveRecord::Base
 
   validates :gvdate,

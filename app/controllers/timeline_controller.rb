@@ -1,4 +1,3 @@
-# coding: utf-8
 class TimelineController < ApplicationController
   include FortUtil
   include TimeUtil
@@ -56,7 +55,7 @@ class TimelineController < ApplicationController
     else fort_groups?(fort) ? fort : nil
     end
     (render_404; return) if gs.nil? || gs.empty?
-    
+
     @timeline = FortTimeline.build(@gvdate, gs)
     (render_404; return) unless @timeline
   end
@@ -194,7 +193,7 @@ class TimelineController < ApplicationController
     return false unless (CacheData.timeline_dates.include?(from) && CacheData.timeline_dates.include?(to))
     true
   end
-  
+
   def valid_span_timeline_size?(n)
     return false unless n
     return false if n < 2

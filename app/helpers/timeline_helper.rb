@@ -1,4 +1,3 @@
-# coding: utf-8
 module TimelineHelper
 
   def timeline_span_size

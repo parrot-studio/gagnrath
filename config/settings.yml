@@ -1,7 +1,6 @@
 production:
   env:
     app_path:
-    secret_key_base: 
     server_name: Gimle
     gvtype: FE
     sample_mode: false
@@ -35,7 +34,6 @@ production:
 development:
   env:
     app_path:
-    secret_key_base: 0cf7dcf09ec633f5ea414b155be09c315109cada6e9978c20bee084fdcfc5a2dfb590db7500f106058c647fcbc465cf26ba5f133ea1c55e9b07c477d037b020c
     server_name: Nounai
     gvtype: FE
     sample_mode: false
@@ -69,7 +67,6 @@ development:
 test:
   env:
     app_path:
-    secret_key_base: b290cfea98c5a67295d60790905c7ab3968d0c733fefadb54e4ac585baab5ce73c76819758563d72905fb6b5e54b4892205b61397ad0e2dedec5657894dd662e
     server_name: SakrayJ
     gvtype: FE
     sample_mode: false

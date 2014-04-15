@@ -1,4 +1,3 @@
-# coding: utf-8
 module ResultHelper
 
   def result_view_for_se?
