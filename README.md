@@ -6,8 +6,8 @@ Description
 ROのGvGにおいて、「現状」を把握するためのシステム「ROGv」の新バージョンです。
 見た目や機能はほぼ同じですが、一から設計し直しました。
 
-- Ruby2.1(1.9系は未対応)
-- Rails4.1
+- Ruby2.2
+- Rails4.2
 - MariaDB5以上（MySQLでも可）
 - memcached（以前と違い必須）
 

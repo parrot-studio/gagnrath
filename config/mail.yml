@@ -1,12 +1,8 @@
 production:
   delivery_method: smtp
   smtp_settings:
-    address: smtp.gmail.com
-    port: 587
-    user_name:
-    password:
-    authentication: :plain
-    enable_starttls_auto: true
+    address: localhost
+    port: 25
   admin:
     from:
     to:
