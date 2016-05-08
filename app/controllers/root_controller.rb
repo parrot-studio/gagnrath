@@ -11,6 +11,12 @@ class RootController < ApplicationController
       redirect_to root_path unless reload_cycle.include?(@reload)
     end
     @situation = Situation.latest || Situation.new
+    @gvtime = if TimeUtil.in_battle_time?
+      Time.current
+    else
+      (@situation.update_time || Time.current)
+    end
+
   end
 
   def menu

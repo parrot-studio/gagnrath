@@ -12,7 +12,8 @@
         </tr>
       </thead>
       <tbody>
-        <% forts = situation.forts_map; sup_time = situation.update_time
+        <% forts = situation.forts_map
+        sup_time = (@gvtime ? @gvtime : situation.update_time)
         fort_groups.each do |g| %>
           <tr>
             <th class="span2"><%= g %></th>
