@@ -17,6 +17,8 @@ class RootController < ApplicationController
       (@situation.update_time || Time.current)
     end
 
+    gvdate = TimeUtil.time_to_gvdate(@gvtime)
+    @breaks = Caller.where(gvdate: gvdate).group(:fort_code).count
   end
 
   def menu

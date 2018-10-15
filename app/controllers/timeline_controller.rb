@@ -64,6 +64,8 @@ class TimelineController < ApplicationController
     @timeline = FortTimeline.build(@gvdate, gs)
     (render_404; return) unless @timeline
 
+    @breaks = Caller.where(gvdate: @gvdate).group(:fort_code).count
+
     add_navs_for_date(@gvdate)
     add_navs(fort)
   end

@@ -42,6 +42,7 @@ class ResultController < ApplicationController
     @date = params[:date]
     (render_404; return) unless CacheData.result_dates.include?(@date)
     @rulers = Ruler.for_date(@date)
+    @breaks = Caller.where(gvdate: @date).group(:fort_code).count
 
     add_navs_for_date(@date)
     add_navs("Forts")

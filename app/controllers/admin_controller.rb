@@ -129,7 +129,7 @@ class AdminController < ApplicationController
       r.fort_code = fcd
       r.fort_name = (f ? f.fort_name : '')
       r.formal_name = (f ? f.formal_name : '')
-      r.guild_name = gname
+      r.guild_name = gname.strip
       r.source = Ruler::SOURCE_MANUAL
       r.full_defense = false
 

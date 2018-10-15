@@ -23,6 +23,7 @@
               if f
                 uptime = f.uptime_from(sup_time) / 60
                 upweek = uptime / 10080
+                bcount = (@breaks || {})[f.fort_code] || 0
               %>
                 <td class="span3">
                   <p>
@@ -49,6 +50,12 @@
                       <small class="muted">uptime:<span class="uptime-attention"><%= upweek %>week!!</span></small>
                     <% else %>
                       <small class="muted">uptime:<%= uptime %>min</small>
+                    <% end %>
+                    <small class="muted"> / </small>
+                    <% if bcount < 3 %>
+                      <small class="muted attention"><%= bcount %>-break!!</small>
+                    <% else %>
+                      <small class="muted"><%= bcount %>-break!!</small>
                     <% end %>
                   </p>
                 </td>

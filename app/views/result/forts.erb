@@ -37,15 +37,17 @@ adate = rdates.select{|d| d > @date}.sort.first
             <th class="span2"><%= g %></th>
             <% fort_nums.each do |num|
               r = rtable["#{g}#{num}"]
+              bcount = (@breaks || {})["#{g}#{num}"] || 0
               if r %>
                 <td class="span3">
                   <p>
                     <small  class="muted"><%= r.fort_name %></small><br/>
-                    <small  class="muted"><%= r.formal_name %></small><br/>
+                    <!-- <small  class="muted"><%= r.formal_name %></small><br/> -->
                     <strong><%= r.guild_name %></strong>
                     <small>
                       <%= link_to('★', result_total_guild_path(encode_for_url(r.guild_name))) %>
-                    </small>
+                    </small><br/>
+                    <small  class="muted">break: <%= bcount %></small>
                   </p>
                 </td>
               <% else %>

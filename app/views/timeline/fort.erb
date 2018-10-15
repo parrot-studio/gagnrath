@@ -57,6 +57,12 @@
             <td class="span3 attention text-center"><strong><%= @timeline.result[f] || '-' %></strong></td>
           <% end %>
         </tr>
+        <tr>
+          <td class="span2 text-center">Break</td>
+          <% @timeline.forts.each do |f| %>
+            <td class="span3 text-center"><%= (@breaks || {})[f] || 0 %></td>
+          <% end %>
+        </tr>
       </tbody>
     </table>
   </div>

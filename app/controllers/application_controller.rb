@@ -125,6 +125,7 @@ class ApplicationController < ActionController::Base
   end
 
   def server_error
+    Rails.logger.error($!)
     render template: 'root/error', status: 500
   end
 
